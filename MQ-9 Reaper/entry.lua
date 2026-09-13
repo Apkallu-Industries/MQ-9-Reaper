@@ -9,7 +9,7 @@ installed 	    = true,
 dirName	  	    = current_mod_path,
 fileMenuName    = _("MQ-9 Reaper"),
 
-version		    = "2.9.0",
+version		    = "0.0.1v",
 state		    = "installed",
 info		    = _("General Atomics MQ-9 Reaper Unmanned Aerial Vehicle (Flyable Mod)."),
 
@@ -17,6 +17,16 @@ InputProfiles =
 {
     ["MQ-9_Reaper"] = current_mod_path .. '/Input/MQ-9 Reaper',
     ["MQ-9 Reaper"] = current_mod_path .. '/Input/MQ-9 Reaper',
+},
+
+Options =
+{
+    {
+        name   = _("MQ-9 Reaper"),
+        nameId = "MQ-9_Reaper",
+        dir    = "Options",
+        CLSID  = "{MQ-9_Reaper options}"
+    },
 },
 
 Skins =

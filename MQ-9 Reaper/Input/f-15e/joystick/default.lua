@@ -12,13 +12,13 @@ join(res.keyCommands,{
 {combos = {{key = 'JOY_BTN7'}}, down = iCommandViewHUDOnlyOnOff, name = _('Toggle Drone 2-View: Clean Sensor / Chase (Controller [View/Back])'), category = _('View')},
 {combos = {{key = 'JOY_BTN8'}}, down = iCommandPlaneSAUHBarometric, name = _('Barometric Altitude Hold Autopilot (Controller [Menu/Start])'), category = _('Autopilot')},
 {combos = {{key = 'JOY_BTN9'}}, down = iCommandPlaneModeGround, name = _('Air-To-Ground Combat Mode 7 (Controller [LS Click])'), category = _('Modes')},
-{combos = {{key = 'JOY_BTN10'}}, down = iCommandPlaneNightTVOnOff, name = _('Night Vision / FLIR Thermal White-Hot/Black-Hot (Controller [RS Click])'), category = _('Sensors')},
+{combos = {{key = 'JOY_BTN10'}}, down = iCommandPlaneRadarCenter, name = _('Recenter Camera / Flight Seat View (Controller [RS Click])'), category = _('Sensors')},
 
--- D-Pad Slew Controls
-{combos = {{key = 'JOY_POV1_U'}}, pressed = iCommandPlaneRadarUp, up = iCommandPlaneRadarStop, name = _('Sensor Slew Up (Controller [D-Pad Up])'), category = _('Sensors')},
-{combos = {{key = 'JOY_POV1_D'}}, pressed = iCommandPlaneRadarDown, up = iCommandPlaneRadarStop, name = _('Sensor Slew Down (Controller [D-Pad Down])'), category = _('Sensors')},
-{combos = {{key = 'JOY_POV1_L'}}, pressed = iCommandPlaneRadarLeft, up = iCommandPlaneRadarStop, name = _('Sensor Slew Left (Controller [D-Pad Left])'), category = _('Sensors')},
-{combos = {{key = 'JOY_POV1_R'}}, pressed = iCommandPlaneRadarRight, up = iCommandPlaneRadarStop, name = _('Sensor Slew Right (Controller [D-Pad Right])'), category = _('Sensors')},
+-- D-Pad Tactical Controls (Zoom & Thermal / Night Vision)
+{combos = {{key = 'JOY_POV1_U'}}, down = iCommandPlaneZoomIn, name = _('Sensor Zoom In (Controller [D-Pad Up])'), category = _('Sensors')},
+{combos = {{key = 'JOY_POV1_D'}}, down = iCommandPlaneZoomOut, name = _('Sensor Zoom Out (Controller [D-Pad Down])'), category = _('Sensors')},
+{combos = {{key = 'JOY_POV1_L'}}, down = iCommandPlaneNightTVOnOff, name = _('Night Vision / FLIR Thermal WHOT/BHOT (Controller [D-Pad Left])'), category = _('Sensors')},
+{combos = {{key = 'JOY_POV1_R'}}, down = iCommandPlaneLaserRangerOnOff, name = _('Laser Designator PRF 1688 Toggle (Controller [D-Pad Right])'), category = _('Sensors')},
 
 -- Autopilot
 {down = iCommandPlaneAutopilot, name = _('Autopilot'), category = _('Autopilot')},
@@ -50,14 +50,16 @@ join(res.keyCommands,{
 {down = iCommandActiveIRJamming, name = _('IR Jamming'), category = _('Countermeasures')},
 })
 
--- Joystick & Gamepad Axes
+-- Joystick & Gamepad Axes: Left Stick = Flight, Right Stick = Gimbal Camera Slew
 join(res.axisCommands,{
 {combos = defaultDeviceAssignmentFor("roll"), action = iCommandPlaneRoll, name = _('Roll (Left Stick X)')},
 {combos = defaultDeviceAssignmentFor("pitch"), action = iCommandPlanePitch, name = _('Pitch (Left Stick Y)')},
-{combos = defaultDeviceAssignmentFor("rudder"), action = iCommandPlaneRudder, name = _('Yaw / Rudder (Right Stick X)')},
 {combos = defaultDeviceAssignmentFor("thrust"), action = iCommandPlaneThrustCommon, name = _('Throttle / Power')},
-{action = iCommandPlaneSelecterHorizontalAbs, name = _('Sensor Slew Horizontal')},
-{action = iCommandPlaneSelecterVerticalAbs, name = _('Sensor Slew Vertical')},
+{action = iCommandPlaneRudder, name = _('Yaw / Rudder')},
+
+-- Dedicated Right Thumbstick Gimbal Camera Slew Axes
+{combos = {{key = 'JOY_RX'}}, action = iCommandPlaneSelecterHorizontalAbs, name = _('Camera / Sensor Slew Horizontal (Right Stick X)')},
+{combos = {{key = 'JOY_RY'}}, action = iCommandPlaneSelecterVerticalAbs,   name = _('Camera / Sensor Slew Vertical (Right Stick Y)')},
 {action = iCommandPlaneMFDZoomAbs, name = _('Sensor Zoom')},
 })
 
