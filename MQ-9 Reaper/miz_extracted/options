@@ -1,0 +1,10 @@
+options = 
+{
+    ["difficulty"] = 
+    {
+        ["fuel"] = false,
+        ["weapons"] = false,
+        ["labels"] = 1,
+    },
+    ["format"] = 1,
+}

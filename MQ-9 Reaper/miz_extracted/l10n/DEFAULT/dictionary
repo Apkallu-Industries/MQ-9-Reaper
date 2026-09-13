@@ -1,0 +1,8 @@
+dictionary = 
+{
+    ["DictKey_sortie_5"] = "MQ-9 Reaper - Caucasus Combat Patrol",
+    ["DictKey_descriptionText_1"] = "OPERATION SENTINEL GUARDIAN - CAUCASUS\n\nPRIMARY OBJECTIVE: Armed Reconnaissance & Precision Strike\nFly the MQ-9 Reaper in support of coalition operations near Kobuleti.\nHostile mechanized insurgents (BTR-80s, supply trucks, and scout technicals) have set up an outpost 18 km to the East.\n\nFLIGHT CONTROLS:\n* Press [F4] for 3rd-person external Chase View\n* Press [F1] for Cockpit / Sensor Operator Station view\n* [W] / [S]: Throttle (Up / Down)\n* [A] / [D]: Roll Left / Right\n* [Q] / [E]: Rudder Yaw Left / Right\n* [H]: Barometric Altitude Hold Autopilot\n\nSENSOR & WEAPONS DEPLOYMENT:\n* Press [7] for Air-To-Ground Mode\n* Press [O] to activate Shkval TV Optical Camera (MTS-B EO/IR Sensor)\n* Slew Camera Reticle: [ ; ] Up, [ . ] Down, [ , ] Left, [ / ] Right\n* Zoom Camera: [ = ] Zoom In (up to 23x), [ - ] Zoom Out\n* Lock Target: Press [Enter]\n* Laser Designator: Press [RAlt + L]\n* Fire Weapon: Press [Space] to launch AGM-114K Hellfire or drop GBU-12!",
+    ["DictKey_descriptionBlueTask_3"] = "Locate and destroy the insurgent mechanized column to the East using AGM-114K Hellfire missiles and GBU-12 laser-guided bombs.",
+    ["DictKey_descriptionRedTask_2"] = "Defend the insurgent outpost.",
+    ["DictKey_descriptionNeutralsTask_4"] = "",
+}

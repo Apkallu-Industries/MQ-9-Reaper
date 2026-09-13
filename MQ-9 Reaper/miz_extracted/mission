@@ -1,0 +1,493 @@
+mission = 
+{
+    ["theatre"] = "Caucasus",
+    ["groundControl"] = 
+    {
+        ["isPilotControlVehicles"] = true,
+        ["passwords"] = 
+        {
+            ["artillery_commander"] = {},
+            ["forward_observer"] = {},
+            ["instructor"] = {},
+            ["observer"] = {},
+        },
+        ["roles"] = 
+        {
+            ["artillery_commander"] = { ["blue"] = 1, ["red"] = 0, ["neutrals"] = 0 },
+            ["forward_observer"] = { ["blue"] = 1, ["red"] = 0, ["neutrals"] = 0 },
+            ["instructor"] = { ["blue"] = 1, ["red"] = 0, ["neutrals"] = 0 },
+            ["observer"] = { ["blue"] = 0, ["red"] = 0, ["neutrals"] = 0 },
+        },
+    },
+    ["requiredModules"] = {},
+    ["date"] = { ["Year"] = 2024, ["Month"] = 6, ["Day"] = 15 },
+    ["start_time"] = 36000,
+    ["sortie"] = "DictKey_sortie_5",
+    ["descriptionText"] = "DictKey_descriptionText_1",
+    ["descriptionBlueTask"] = "DictKey_descriptionBlueTask_3",
+    ["descriptionRedTask"] = "DictKey_descriptionRedTask_2",
+    ["descriptionNeutralsTask"] = "DictKey_descriptionNeutralsTask_4",
+    ["pictureFileNameB"] = {},
+    ["pictureFileNameR"] = {},
+    ["pictureFileNameServer"] = {},
+    ["version"] = 23,
+    ["maxUnitId"] = 10,
+    ["maxGroupId"] = 10,
+    ["maxDictId"] = 5,
+    ["currentKey"] = 100,
+    ["failures"] = {},
+    ["forcedOptions"] = {},
+    ["resourceCounter"] = {},
+    ["map"] = 
+    {
+        ["centerX"] = -280000,
+        ["centerY"] = 660000,
+        ["zoom"] = 100000,
+    },
+    ["goals"] = {},
+    ["triggers"] = 
+    {
+        ["zones"] = {},
+    },
+    ["trig"] = 
+    {
+        ["actions"] = 
+        {
+            [1] = "a_do_script_file(getValueResourceByKey(\"ResKey_Action_1\")); mission.trig.func[1]=nil;",
+        },
+        ["events"] = {},
+        ["custom"] = {},
+        ["func"] = 
+        {
+            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1]() end",
+        },
+        ["flag"] = 
+        {
+            [1] = true,
+        },
+        ["conditions"] = 
+        {
+            [1] = "return(c_time_after(1) )",
+        },
+        ["customStartup"] = 
+        {
+            [1] = "for i,t in ipairs(mission.trig.conditions) do mission.trig.conditions[i]=loadstring(t) end",
+            [2] = "for i,t in ipairs(mission.trig.actions) do mission.trig.actions[i]=loadstring(t) end",
+        },
+        ["funcStartup"] = 
+        {
+            [1] = "if mission.trig.conditions[1]() then mission.trig.actions[1]() end",
+        },
+    },
+    ["trigrules"] = 
+    {
+        [1] = 
+        {
+            ["rules"] = 
+            {
+                [1] = 
+                {
+                    ["seconds"] = 1,
+                    ["predicate"] = "c_time_after",
+                },
+            },
+            ["eventlist"] = "",
+            ["comment"] = "Initialize MQ-9 GCS Tactical Menu",
+            ["actions"] = 
+            {
+                [1] = 
+                {
+                    ["ai_task"] = 
+                    {
+                        [1] = "",
+                        [2] = "",
+                    },
+                    ["file"] = "ResKey_Action_1",
+                    ["predicate"] = "a_do_script_file",
+                },
+            },
+            ["predicate"] = "triggerOnce",
+        },
+    },
+    ["weather"] = 
+
+	{
+
+		["name_ru"] = "Лето. Oблачность и ветер",
+
+		["wind"] = 
+
+		{
+
+			["at8000"] = 
+
+			{
+
+				["speed"] = 0,
+
+				["dir"] = 71,
+
+			}, -- end of ["at8000"]
+
+			["atGround"] = 
+
+			{
+
+				["speed"] = 0,
+
+				["dir"] = 160,
+
+			}, -- end of ["atGround"]
+
+			["at2000"] = 
+
+			{
+
+				["speed"] = 0,
+
+				["dir"] = 243,
+
+			}, -- end of ["at2000"]
+
+		}, -- end of ["wind"]
+
+		["enable_fog"] = false,
+    ["enable_dust"] = false,
+    ["dust_density"] = 0,
+    ["groundTurbulence"] = 0,
+    ["fog2"] = { ["mode"] = 1 },
+
+		["season"] = 
+
+		{
+
+			["iseason"] = 1,
+
+			["temperature"] = 26,
+
+		}, -- end of ["season"]
+
+		["qnh"] = 755,
+
+		["cyclones"] = 
+
+		{
+
+			[3] = 
+
+			{
+
+				["ellipticity"] = 0.89635219132085,
+
+				["centerZ"] = 1137265.5916558,
+
+				["pressure_spread"] = 871903.00765166,
+
+				["rotation"] = -0.0061352048077511,
+
+				["pressure_excess"] = -938.57166284129,
+
+				["centerX"] = -640824.56012978,
+
+			}, -- end of [3]
+
+			[2] = 
+
+			{
+
+				["ellipticity"] = 1.0590196055576,
+
+				["centerZ"] = -864112.01092605,
+
+				["pressure_spread"] = 646745.33599321,
+
+				["rotation"] = 1.2954634296446,
+
+				["pressure_excess"] = -1374.2001835403,
+
+				["centerX"] = -60875.049514612,
+
+			}, -- end of [2]
+
+			[1] = 
+
+			{
+
+				["ellipticity"] = 0.54761928365809,
+
+				["centerZ"] = 226317.02672821,
+
+				["pressure_spread"] = 865875.66185017,
+
+				["rotation"] = -0.065585436041976,
+
+				["pressure_excess"] = -1327.8489900407,
+
+				["centerX"] = -52078.955386944,
+
+			}, -- end of [1]
+
+		}, -- end of ["cyclones"]
+
+		["name_de"] = "Sommer, Wind und Wolken",
+
+		["clouds"] = 
+
+		{
+
+			["thickness"] = 770,
+
+			["density"] = 3,
+
+			["base"] = 4500,
+
+			["iprecptns"] = 0,
+
+		}, -- end of ["clouds"]
+
+		["atmosphere_type"] = 0,
+
+		["name_fr"] = "Eté, nuages et vent",
+
+		["turbulence"] = 
+
+		{
+
+			["at8000"] = 3,
+
+			["atGround"] = 0,
+
+			["at2000"] = 2,
+
+		}, -- end of ["turbulence"]
+
+		["type_weather"] = 0,
+
+		["name"] = "Summer. Clouds & wind",
+
+		["fog"] = 
+
+		{
+
+			["thickness"] = 0,
+
+			["visibility"] = 1000,
+
+			["density"] = 0,
+
+		}, -- end of ["fog"]
+
+		["name_es"] = "Verano. Nubes y viento",
+
+		["visibility"] = 
+
+		{
+
+			["distance"] = 80000,
+
+		}, -- end of ["visibility"]
+
+		["name_cn"] = "夏季 多云+有风",
+
+	}, -- end of ["weather"],
+    ["result"] = 
+    {
+        ["total"] = 0,
+        ["offline"] = { ["conditions"] = {}, ["actions"] = {}, ["func"] = {} },
+        ["blue"] = { ["conditions"] = {}, ["actions"] = {}, ["func"] = {} },
+        ["red"] = { ["conditions"] = {}, ["actions"] = {}, ["func"] = {} },
+    },
+    ["coalitions"] = 
+    {
+        ["blue"] = { [1] = 2 },
+        ["red"] = { [1] = 47 },
+        ["neutrals"] = {},
+    },
+    ["coalition"] = 
+    {
+        ["blue"] = 
+        {
+            ["bullseye"] = { ["x"] = -280000, ["y"] = 650000 },
+            ["nav_points"] = {},
+            ["name"] = "blue",
+            ["country"] = 
+            {
+                [1] = 
+                {
+                    ["id"] = 2,
+                    ["name"] = "USA",
+                    ["plane"] = 
+                    {
+                        ["group"] = 
+                        {
+                            [1] = 
+                            {
+                                ["groupId"] = 1,
+                                ["name"] = "Reaper-Flight-1",
+                                ["task"] = "Ground Attack",
+                                ["uncontrollable"] = false,
+                                ["x"] = -280000.0,
+                                ["y"] = 650000.0,
+                                ["start_time"] = 0,
+                                ["hidden"] = false,
+                                ["route"] = 
+                                {
+                                    ["points"] = 
+                                    {
+                                        [1] = 
+                                        {
+                                            ["alt"] = 2500,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["speed"] = 65,
+                                            ["x"] = -280000.0,
+                                            ["y"] = 650000.0,
+                                        },
+                                        [2] = 
+                                        {
+                                            ["alt"] = 2500,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Turning Point",
+                                            ["speed"] = 65,
+                                            ["x"] = -280000.0,
+                                            ["y"] = 675000.0,
+                                        },
+                                    },
+                                },
+                                ["units"] = 
+                                {
+                                    [1] = 
+                                    {
+                                        ["unitId"] = 1,
+                                        ["name"] = "Reaper-1-1",
+                                        ["type"] = "MQ-9_Reaper",
+                                        ["skill"] = "Player",
+                                        ["heading"] = 0,
+                                        ["psi"] = 0,
+                                        ["x"] = -280000.0,
+                                        ["y"] = 650000.0,
+                                        ["alt"] = 2500,
+                                        ["alt_type"] = "BARO",
+                                        ["speed"] = 65,
+                                        ["livery_id"] = "standard",
+                                        ["onboard_num"] = "011",
+                                        ["payload"] = 
+                                        {
+                                            ["fuel"] = 1300,
+                                            ["flare"] = 0,
+                                            ["chaff"] = 0,
+                                            ["gun"] = 0,
+                                            ["pylons"] = 
+                                            {
+                                                [1] = { ["CLSID"] = "AGM114x2_OH_58" },
+                                                [2] = { ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}" },
+                                                [3] = { ["CLSID"] = "{DB769D48-67D7-42ED-A2BE-108D566C8B1E}" },
+                                                [4] = { ["CLSID"] = "AGM114x2_OH_58" },
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        ["red"] = 
+        {
+            ["bullseye"] = { ["x"] = -280000, ["y"] = 670000 },
+            ["nav_points"] = {},
+            ["name"] = "red",
+            ["country"] = 
+            {
+                [1] = 
+                {
+                    ["id"] = 47,
+                    ["name"] = "Insurgents",
+                    ["vehicle"] = 
+                    {
+                        ["group"] = 
+                        {
+                            [1] = 
+                            {
+                                ["groupId"] = 2,
+                                ["name"] = "Insurgent Convoy",
+                                ["task"] = "Ground Nothing",
+                                ["uncontrollable"] = false,
+                                ["x"] = -280000.0,
+                                ["y"] = 670000.0,
+                                ["start_time"] = 0,
+                                ["visible"] = true,
+                                ["route"] = 
+                                {
+                                    ["points"] = 
+                                    {
+                                        [1] = 
+                                        {
+                                            ["alt"] = 50,
+                                            ["type"] = "Turning Point",
+                                            ["action"] = "Off Road",
+                                            ["speed"] = 0,
+                                            ["x"] = -280000.0,
+                                            ["y"] = 670000.0,
+                                        },
+                                    },
+                                },
+                                ["units"] = 
+                                {
+                                    [1] = 
+                                    {
+                                        ["unitId"] = 2,
+                                        ["type"] = "BTR-80",
+                                        ["name"] = "Target-BTR-Lead",
+                                        ["skill"] = "Average",
+                                        ["heading"] = 1.57,
+                                        ["x"] = -280000.0,
+                                        ["y"] = 670000.0,
+                                    },
+                                    [2] = 
+                                    {
+                                        ["unitId"] = 3,
+                                        ["type"] = "BTR-80",
+                                        ["name"] = "Target-BTR-Trail",
+                                        ["skill"] = "Average",
+                                        ["heading"] = 1.57,
+                                        ["x"] = -280040.0,
+                                        ["y"] = 670000.0,
+                                    },
+                                    [3] = 
+                                    {
+                                        ["unitId"] = 4,
+                                        ["type"] = "Ural-375",
+                                        ["name"] = "Target-AmmoTruck",
+                                        ["skill"] = "Average",
+                                        ["heading"] = 1.57,
+                                        ["x"] = -280080.0,
+                                        ["y"] = 670000.0,
+                                    },
+                                    [4] = 
+                                    {
+                                        ["unitId"] = 5,
+                                        ["type"] = "UAZ-469",
+                                        ["name"] = "Target-ScoutJeep",
+                                        ["skill"] = "Average",
+                                        ["heading"] = 1.57,
+                                        ["x"] = -280120.0,
+                                        ["y"] = 670000.0,
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        ["neutrals"] = 
+        {
+            ["bullseye"] = { ["x"] = 0, ["y"] = 0 },
+            ["nav_points"] = {},
+            ["name"] = "neutrals",
+            ["country"] = {},
+        },
+    },
+}

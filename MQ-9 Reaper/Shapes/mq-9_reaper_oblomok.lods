@@ -1,0 +1,7 @@
+model = {
+	lods = {
+		{"mq-9_reaper_oblomok.edm", 300};
+                {"LD_1.edm", 5000};
+	};
+	
+}

@@ -1,0 +1,4 @@
+mapResource = 
+{
+    ["ResKey_Action_1"] = "reaper_gcs_menu.lua",
+}
