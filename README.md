@@ -1,7 +1,7 @@
 # MQ-9 Reaper UCAV — DCS World Standalone Module
 
 <p align="center">
-  <img src="assets/mq9_reaper_github_banner.svg" alt="MQ-9 Reaper DCS World Module" width="100%">
+  <img src="assets/mq9_reaper_github_banner.png" alt="MQ-9 Reaper DCS World Module" width="100%">
 </p>
 
 <p align="center">
