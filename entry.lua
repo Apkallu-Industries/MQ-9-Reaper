@@ -2,7 +2,7 @@ local self_ID = "MQ-9 Reaper Flyable"
 declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
-developerName   = "Eagle Dynamics / Apkallu Industries",
+developerName   = "Eagle Dynamics / Yutani Industries (Apkallu)",
 
 image     	    = "FC3.bmp",
 installed 	    = true,
