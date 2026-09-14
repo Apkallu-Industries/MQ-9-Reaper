@@ -18,7 +18,7 @@
 
 The **General Atomics MQ-9 Reaper** (Predator B) is the quintessential armed, multi-mission, medium-altitude long-endurance (MALE) remotely piloted aircraft. This DCS World standalone module simulates the **Ground Control Station (GCS)** operator experience: an authentic tactical Head-Up Display, an electro-optical / infrared (EO/IR) sensor turret you slew by hand, hands-off autonomous orbit, and AGM-114 Hellfire / GBU-12 laser-guided strikes.
 
-Built on a **Su-25T (FC3) flight-model shell** for rock-solid avionics and weapon integration, and developed under the **Autonomous Drone Asset Pack (ADAP)** initiative by **Yutani Industries** *(Apkallu)* — *Building Better Worlds.*
+Built on a **Su-25T (FC3) flight-model shell** for rock-solid avionics and weapon integration, and developed under the **Autonomous Drone Asset Pack (ADAP)** initiative by **Yutani Industries** — *Building Better Worlds.*
 
 > This is the operational proof-of-concept for the wider ADAP pack (RQ-28A recon UAV, ASD-1 ground robotics, and a Combined-Arms kill-web to follow). See [ROADMAP.md](ROADMAP.md).
 
@@ -142,7 +142,7 @@ Selectable paint schemes from the Mission Editor and payload menus:
 
 ## 🛠️ Credits & Notes
 
-- **Development:** Yutani Industries *(Apkallu)* — Autonomous Drone Asset Pack.
+- **Development:** Yutani Industries — Autonomous Drone Asset Pack.
 - **Flight model:** built on the Eagle Dynamics **Su-25T (FC3)** shell for stable avionics and weapon integration.
 - **Assets:** this module reuses base-game Su-25T cockpit/shape assets from DCS World. Those Eagle Dynamics assets are **not for redistribution** outside a licensed DCS install — treat this repository as a working project, not a redistribution package.
 
