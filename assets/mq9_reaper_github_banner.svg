@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" role="img" aria-label="MQ-9 Reaper — DCS World Module">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0f1a"/>
+      <stop offset="1" stop-color="#0f1728"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d7dee7"/>
+      <stop offset="0.55" stop-color="#b7c0cc"/>
+      <stop offset="1" stop-color="#8b95a4"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c3ccd7"/>
+      <stop offset="1" stop-color="#9aa4b2"/>
+    </linearGradient>
+    <radialGradient id="ball" cx="0.4" cy="0.35" r="0.8">
+      <stop offset="0" stop-color="#3a4657"/>
+      <stop offset="1" stop-color="#141b26"/>
+    </radialGradient>
+    <clipPath id="frame"><rect width="1200" height="400" rx="10"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="400" fill="url(#bg)"/>
+
+    <!-- faint grid -->
+    <g stroke="#6fe3ff" stroke-width="1" opacity="0.05">
+      <path d="M0 40 H1200 M0 80 H1200 M0 120 H1200 M0 160 H1200 M0 200 H1200 M0 240 H1200 M0 280 H1200 M0 320 H1200 M0 360 H1200"/>
+      <path d="M40 0 V400 M120 0 V400 M200 0 V400 M280 0 V400 M360 0 V400 M440 0 V400 M520 0 V400 M600 0 V400 M680 0 V400 M760 0 V400 M840 0 V400 M920 0 V400 M1000 0 V400 M1080 0 V400 M1160 0 V400"/>
+    </g>
+
+    <!-- GCS targeting reticle behind aircraft -->
+    <g stroke="#6fe3ff" fill="none" opacity="0.10">
+      <circle cx="840" cy="190" r="160"/>
+      <circle cx="840" cy="190" r="96"/>
+      <path d="M840 0 V400 M600 190 H1080"/>
+    </g>
+
+    <!-- GCS corner brackets -->
+    <g stroke="#6fe3ff" stroke-width="2" fill="none" opacity="0.55">
+      <path d="M24 24 h34 M24 24 v34"/>
+      <path d="M1176 24 h-34 M1176 24 v34"/>
+      <path d="M24 376 h34 M24 376 v-34"/>
+      <path d="M1176 376 h-34 M1176 376 v-34"/>
+    </g>
+
+    <!-- GCS telemetry flavour text -->
+    <g font-family="Consolas,Menlo,monospace" fill="#6fe3ff" opacity="0.7">
+      <circle cx="1006" cy="49" r="5" fill="#ff4d4d" opacity="0.9"/>
+      <text x="1020" y="54" font-size="15" letter-spacing="1">REC</text>
+      <text x="1176" y="54" font-size="14" text-anchor="end" letter-spacing="1" opacity="0.6">EO/IR · MTS-B</text>
+      <text x="1176" y="376" font-size="13" text-anchor="end" letter-spacing="1" opacity="0.55">ALT 25000  IAS 160  ORBIT HOLD</text>
+    </g>
+
+    <!-- ===== MQ-9 REAPER (nose left, pusher prop right) ===== -->
+    <g stroke="#eef3f9" stroke-width="1.2" stroke-linejoin="round" transform="translate(40,4)">
+
+      <!-- far wing (upper), high aspect ratio -->
+      <path d="M712 176 L1066 116 L1074 124 L724 186 Z" fill="url(#wing)" opacity="0.92"/>
+
+      <!-- upper V-tail ruddervator -->
+      <path d="M1004 184 L1088 118 L1098 126 L1020 194 Z" fill="url(#wing)"/>
+      <!-- lower V-tail ruddervator -->
+      <path d="M1010 208 L1090 266 L1080 272 L1004 214 Z" fill="url(#wing)"/>
+
+      <!-- pusher propeller -->
+      <g stroke="none">
+        <ellipse cx="1096" cy="192" rx="5" ry="44" fill="#6fe3ff" opacity="0.18"/>
+        <rect x="1093" y="150" width="6" height="84" rx="3" fill="#2b3340"/>
+        <circle cx="1096" cy="192" r="7" fill="#3a4657"/>
+      </g>
+
+      <!-- fuselage: bulbous SATCOM nose to slender tail boom -->
+      <path d="M472 200
+               C476 182 498 170 540 166
+               C610 160 720 168 900 180
+               C980 185 1030 189 1058 192
+               C1030 197 980 202 900 208
+               C720 224 596 230 540 226
+               C500 223 478 216 472 200 Z"
+            fill="url(#body)"/>
+
+      <!-- chin sensor turret (MTS-B) -->
+      <circle cx="548" cy="232" r="24" fill="url(#ball)"/>
+      <circle cx="540" cy="226" r="7" fill="#6fe3ff" opacity="0.85"/>
+
+      <!-- near wing (lower/foreground) -->
+      <path d="M706 200 L992 250 L980 260 L716 210 Z" fill="url(#wing)"/>
+
+      <!-- underwing pylons + Hellfire missiles -->
+      <g stroke="#e8edf3" stroke-width="1">
+        <rect x="812" y="228" width="3" height="12" fill="#7c8698"/>
+        <rect x="884" y="240" width="3" height="12" fill="#7c8698"/>
+        <rect x="790" y="240" width="70" height="7" rx="3.5" fill="#aeb8c6"/>
+        <rect x="862" y="252" width="70" height="7" rx="3.5" fill="#9aa4b2"/>
+        <path d="M790 243 l-9 0.5" stroke="#cfd6df" stroke-width="3"/>
+        <path d="M862 255 l-9 0.5" stroke="#cfd6df" stroke-width="3"/>
+      </g>
+
+      <!-- leading-edge rim light -->
+      <path d="M472 200 C476 182 498 170 540 166 C610 160 720 168 900 180"
+            fill="none" stroke="#6fe3ff" stroke-width="1.6" opacity="0.55"/>
+    </g>
+
+    <!-- ===== Title block ===== -->
+    <g font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+      <text x="60" y="176" font-size="66" font-weight="800" fill="#f2f6fb" letter-spacing="1">MQ-9 REAPER</text>
+      <rect x="64" y="196" width="132" height="3" fill="#6fe3ff"/>
+      <text x="204" y="200" font-size="18" font-weight="600" fill="#6fe3ff" letter-spacing="4">GENERAL ATOMICS · UCAV</text>
+      <text x="62" y="242" font-size="17" fill="#93a3b8" letter-spacing="2">Autonomous Drone Asset Pack — DCS World Module</text>
+      <text x="62" y="270" font-size="14" fill="#67788e" letter-spacing="1">Ground Control Station · EO/IR Sensor · AGM-114 Hellfire · GBU-12</text>
+    </g>
+  </g>
+</svg>
