@@ -18,7 +18,7 @@
 
 The **General Atomics MQ-9 Reaper** (Predator B) is the quintessential armed, multi-mission, medium-altitude long-endurance (MALE) remotely piloted aircraft. This DCS World standalone module simulates the **Ground Control Station (GCS)** operator experience: an authentic tactical Head-Up Display, an electro-optical / infrared (EO/IR) sensor turret you slew by hand, hands-off autonomous orbit, and AGM-114 Hellfire / GBU-12 laser-guided strikes.
 
-Built on a **Su-25T (FC3) flight-model shell** for rock-solid avionics and weapon integration, and developed under the **Autonomous Drone Asset Pack (ADAP)** initiative by **Yutani Industries** — *Building Better Worlds.*
+Built on a **Su-25T (FC3) flight-model shell** for rock-solid avionics and weapon integration, and developed under the **Autonomous Drone Asset Pack (ADAP)** initiative by **Yutani Industries** — *Building Better Worlds · Fighting in the Name of Peace.*
 
 > This is the operational proof-of-concept for the wider ADAP pack (RQ-28A recon UAV, ASD-1 ground robotics, and a Combined-Arms kill-web to follow). See [ROADMAP.md](ROADMAP.md).
 
