@@ -129,3 +129,25 @@ To ensure zero conflicts and rapid modding across the pack, all future ADAP vehi
    * **Gimbal Slew**: Directional D-Pad or `; . , /`
    * **Autopilot / Orbit**: `[ Menu / Start ]` or `[ H ]`
 4. **Clean Deployment Pipeline**: Single-command build and validation via `repack_and_deploy.ps1` with automated syntax checks.
+
+---
+
+## 6. North Star — The Deployable Ground Control Station (Paid Flagship)
+
+The flagship feature of the paid release, modeled on the **real MQ-9 GCS**: a deployable shelter/container **"Reaper HQ"** placed on the battlefield, crewed by two.
+
+**The concept (authentic to the real system):**
+* A **placeable GCS container** at an airfield, FARP, FOB, or command center.
+* A **Combined Arms** player drives up, parks, and **enters Reaper HQ**.
+* Inside: a **two-seat Ground Control Station** — a **Rated Pilot** (flies the aircraft, releases weapons) and a **Sensor Operator (SO)** (runs the MTS-B EO/IR ball, laser designator, and target track). *(Real USAF billet is Pilot + Sensor Operator, not "Weapons Officer.")*
+
+**Feasibility — build order by capability tier:**
+| Capability | Path | Tier |
+| :--- | :--- | :--- |
+| GCS container as a map object (EDM static/tech mod) | Buildable now | Free |
+| "Drive up + enter HQ" | No native walk-in; simulate via MP proximity trigger → F10 action → slot handoff into the Reaper | Free |
+| Single-player two-station (pilot cam ↔ sensor cam) | Already implemented | Free |
+| **True 2-seat multicrew** (Pilot + SO, two networked humans, one Reaper) | **Full-fidelity module only — requires ED's professional SDK** | **Paid** |
+| Real FLIR/thermal sensor device + custom GCS cockpit | Same — ED SDK / full module | **Paid** |
+
+**Strategic role:** the free shell version (container + scripted entry + single-player decoupled GCS) is the **proof that earns the paid version**. The 2-crew container GCS is the single most compelling reason to pursue an ED third-party partnership — it fills a category DCS does not have (unmanned two-crew GCS) and is authentic to the real platform. **Discipline: the flyable Reaper POC must be finished and validated (kills confirmed) before this is built.**
