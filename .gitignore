@@ -1,0 +1,14 @@
+# --- Scratch / dev artifacts (not part of the mod) ---
+miz_extracted/
+temp_range.lua
+dump_weather.lua
+test_goals.lua
+output.json
+*.bak
+
+# --- OS / editor cruft ---
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+*~
