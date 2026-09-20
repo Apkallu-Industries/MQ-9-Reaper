@@ -120,20 +120,20 @@ foreach ($dcs in $dcsPaths) {
         $inputProfiles = @(
             "MQ-9_Reaper_Flyable"
         )
-        $diffSrc = Join-Path $scriptDir "Input\MQ-9_Reaper_Flyable\joystick\Controller (XBOX 360 For Windows).diff.lua"
-        if (Test-Path $diffSrc) {
+        $joySrcDir = Join-Path $scriptDir "Input\MQ-9_Reaper_Flyable\joystick"
+        if (Test-Path $joySrcDir) {
             foreach ($prof in $inputProfiles) {
                 $profJoyDir = Join-Path $dcs "Config\Input\$prof\joystick"
                 if (-not (Test-Path $profJoyDir)) {
                     New-Item -ItemType Directory -Path $profJoyDir -Force | Out-Null
                 }
                 # Deploy with exact user hardware GUID
+                $diffSrc = Join-Path $joySrcDir "Controller (XBOX 360 For Windows).diff.lua"
                 $guidDiff = Join-Path $profJoyDir "Controller (XBOX 360 For Windows) {5B15AC40-78A5-11f1-8001-444553540000}.diff.lua"
                 Copy-Item -Path $diffSrc -Destination $guidDiff -Force
-                # Also deploy generic diff for future auto-detection
-                $genDiff = Join-Path $profJoyDir "Controller (XBOX 360 For Windows).diff.lua"
-                Copy-Item -Path $diffSrc -Destination $genDiff -Force
-                Write-Host "  -> Deployed Xbox 360 controller profile to: $profJoyDir" -ForegroundColor Green
+                # Also deploy all generic diffs (Xbox 360, Xbox One)
+                Copy-Item -Path (Join-Path $joySrcDir "*.diff.lua") -Destination $profJoyDir -Force
+                Write-Host "  -> Deployed controller profiles to: $profJoyDir" -ForegroundColor Green
             }
         }
 
@@ -144,6 +144,17 @@ foreach ($dcs in $dcsPaths) {
         }
         Copy-Item (Join-Path $scriptDir "Kneeboard\*.png") $kbDest -Force
         Write-Host "  -> Deployed squadron kneeboard to: $kbDest" -ForegroundColor Green
+
+        # Deploy Export.lua gimbal-to-sensor slaving script directly to DCS Scripts directory
+        $scriptsDest = Join-Path $dcs "Scripts"
+        if (-not (Test-Path $scriptsDest)) {
+            New-Item -ItemType Directory -Path $scriptsDest -Force | Out-Null
+        }
+        $exportSrc = Join-Path $scriptDir "Export.lua"
+        if (Test-Path $exportSrc) {
+            Copy-Item -Path $exportSrc -Destination (Join-Path $scriptsDest "Export.lua") -Force
+            Write-Host "  -> Deployed gimbal-to-sensor slaving script to: $scriptsDest\Export.lua" -ForegroundColor Green
+        }
     }
 }
 

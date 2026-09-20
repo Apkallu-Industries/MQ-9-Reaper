@@ -218,18 +218,27 @@ local function initReaperGCS()
     -- INITIAL WELCOME BANNER
     -- =================================================================================
     showOverEnlargedBanner(
-        "GCS ONLINE & TACTICAL LINK ESTABLISHED",
-        "SYSTEM INITIALIZATION COMPLETE",
-        "[ ALL SYSTEMS GREEN - READY FOR TASKING ]",
+        "MQ-9 REAPER GCS ONLINE & TACTICAL LINK ESTABLISHED",
+        "ALL SYSTEMS NOMINAL - READY FOR TASKING",
+        "[ XBOX CONTROLLER & KEYBOARD QUICK REFERENCE ]",
         {
-            "Open F10 Menu: Press [ \\ ] -> [ F10 Other ]",
-            ">> F1: FLIGHT & AUTOPILOT   (Maintain Heading, Altitude, Orbit, Next Waypoint)",
-            ">> F2: WEAPONS & STORES     (Selection, Available Payload, Arm Warhead & Seeker)",
-            ">> F3: GIMBAL CAMERA & LASER (Open/Stow Camera, Laser On/Off, Codes, Datalink)",
-            "Gimbal Camera Controls      : [ O ] or Controller [ B ] = Toggle Sensor Camera",
-            "Mouse Weapon System         : Right Mouse Button (RMB) = Mark Target | Left Mouse Button (LMB) = Fire"
+            "CONTROLLER CONTROLS:",
+            "  [ D-Pad ]         : Slew Gimbal Camera (Look Around)",
+            "  [ LS Click ]      : (7) Combat / Air-to-Ground Mode",
+            "  [ B ]             : Toggle Sensor Camera / MFD Screen (EOS)",
+            "  [ X ]             : Target Lock (Ground Stabilize / Track)",
+            "  [ Y ]             : Laser Ranger & Designator On/Off",
+            "  [ A ]             : Weapon Fire / Launch Hellfire (Hold 1-2s)",
+            "  [ LB ] / [ RB ]   : Throttle Down / Throttle Up",
+            "  [ Back ]          : Center Gimbal Camera",
+            "  [ Start ]         : Autopilot (Level Flight & Altitude Hold)",
+            "  [ RS Click ]      : Target Unlock / Reset Sensor",
+            "KEYBOARD SHORTCUTS:",
+            "  [ 7 ] Combat Mode | [ O ] Camera On/Off | [ RShift+O ] Laser On/Off",
+            "  [ Space ] Fire    | [ Enter ] Lock      | [ Backspace ] Unlock",
+            "  [ W / S ] Throttle| [ H ] Altitude Hold | [ \\ ] F10 GCS Menu"
         },
-        20
+        25
     )
 
     -- =================================================================================

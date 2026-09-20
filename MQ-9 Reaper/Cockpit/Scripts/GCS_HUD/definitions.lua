@@ -2,7 +2,10 @@ dofile(LockOn_Options.common_script_path .. "elements_defs.lua")
 
 DEFAULT_LEVEL = 5
 
-aspect = LockOn_Options.screen.aspect or (16 / 9)
+aspect = (LockOn_Options and LockOn_Options.screen and LockOn_Options.screen.aspect) or (16 / 9)
+if not aspect or aspect < 1.0 then
+    aspect = (16 / 9)
+end
 
 -- Military High-Contrast Color Palette
 HUD_BLACK        = {  0,   0,   0, 255} -- Solid opaque black for bold outlines
@@ -31,6 +34,7 @@ if not matBlack then
     fontGreenDim = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_GREEN_DIM, "fontGreenDim")
     fontCyan     = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_CYAN, "fontCyan")
     fontAmber    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_AMBER, "fontAmber")
+    matMfd0      = MakeMaterial("mfd0", {255, 255, 255, 255})
 end
 
 -- Root indicator anchor (Always visible in drone flight & sensor view)
@@ -119,8 +123,8 @@ function addDot(name, radius, pos, mat)
     dot.material        = mat or matGreen
     pos = pos or {0, 0}
     dot.init_pos        = {pos[1], pos[2], 0}
-    dot.h_clip_relation = h_clip_relations.COMPARE
-    dot.level           = DEFAULT_LEVEL
+    dot.h_clip_relation = h_clip_relations.NULL
+    dot.level           = DEFAULT_LEVEL + 2
     dot.collimated      = false
     set_circle(dot, radius, 0, 360, 20)
     AddElement(dot)
@@ -132,8 +136,8 @@ function addLineSegment(name, p1, p2, mat, thickness)
     line.name            = name
     line.material        = mat or matGreen
     line.init_pos        = {0, 0, 0}
-    line.h_clip_relation = h_clip_relations.COMPARE
-    line.level           = DEFAULT_LEVEL
+    line.h_clip_relation = h_clip_relations.NULL
+    line.level           = DEFAULT_LEVEL + 2
     line.vertices        = {p1, p2}
     line.indices         = {0, 1}
     line.thickness       = thickness or 2.0
@@ -169,8 +173,8 @@ function addStaticText(name, text, pos, align, font, stringdefs)
     txt.screenspace     = ScreenType.SCREENSPACE_TRUE
     pos = pos or {0, 0}
     txt.init_pos        = {pos[1], pos[2], 0}
-    txt.h_clip_relation = h_clip_relations.COMPARE
-    txt.level           = DEFAULT_LEVEL
+    txt.h_clip_relation = h_clip_relations.NULL
+    txt.level           = DEFAULT_LEVEL + 2
     txt.value           = text or ""
     AddElement(txt)
     return txt
@@ -188,8 +192,8 @@ function addDynamicText(name, formatStr, paramName, pos, align, font, stringdefs
     txt.parent_element  = gcs_root.name
     pos = pos or {0, 0}
     txt.init_pos        = {pos[1], pos[2], 0}
-    txt.h_clip_relation = h_clip_relations.COMPARE
-    txt.level           = DEFAULT_LEVEL
+    txt.h_clip_relation = h_clip_relations.NULL
+    txt.level           = DEFAULT_LEVEL + 2
     txt.formats         = {formatStr, "%s"}
     txt.element_params  = {paramName}
     txt.controllers     = {
@@ -197,4 +201,99 @@ function addDynamicText(name, formatStr, paramName, pos, align, font, stringdefs
     }
     Add(txt)
     return txt
+end
+
+-- =====================================================================================
+-- Tactical Sensor Screen (100% Solid MFD Display with Targeting Reticle)
+-- =====================================================================================
+function addSensorScreen(name, x, y, width, height)
+    local hw = width / 2
+    local hh = height / 2
+
+    -- 1. Solid opaque black backing plate (100% SOLID, zero background bleed)
+    local bg           = CreateElement "ceMeshPoly"
+    bg.name            = name .. "_bg"
+    bg.material        = matBlack
+    bg.init_pos        = {x, y, 0}
+    bg.screenspace     = ScreenType.SCREENSPACE_TRUE
+    bg.use_mipfilter   = true
+    bg.additive_alpha  = false
+    bg.blend_mode      = blend_mode.IBM_REGULAR
+    bg.h_clip_relation = h_clip_relations.NULL
+    bg.level           = DEFAULT_LEVEL - 2
+    bg.vertices        = {{-hw - 0.015, -hh - 0.015}, {hw + 0.015, -hh - 0.015}, {hw + 0.015, hh + 0.015}, {-hw - 0.015, hh + 0.015}}
+    bg.indices         = {0, 1, 2, 0, 2, 3}
+    AddElement(bg)
+
+    -- 2. Live Targeting Sensor Video Feed ("mfd0" = Shkval / TGP camera, 100% SOLID)
+    local tv           = CreateElement "ceTexPoly"
+    tv.name            = name .. "_tv"
+    tv.material        = matMfd0
+    tv.init_pos        = {x, y, 0}
+    tv.screenspace     = ScreenType.SCREENSPACE_TRUE
+    tv.use_mipfilter   = true
+    tv.additive_alpha  = false
+    tv.blend_mode      = blend_mode.IBM_REGULAR
+    tv.h_clip_relation = h_clip_relations.NULL
+    tv.level           = DEFAULT_LEVEL - 1
+    tv.vertices        = {{-hw, -hh}, {hw, -hh}, {hw, hh}, {-hw, hh}}
+    tv.indices         = {0, 1, 2, 0, 2, 3}
+    tv.tex_coords      = {{0, 1}, {1, 1}, {1, 0}, {0, 0}}
+    AddElement(tv)
+
+    -- 3. Outer tactical border
+    local border           = CreateElement "ceSMultiLine"
+    border.name            = name .. "_border"
+    border.material        = matGreen
+    border.init_pos        = {x, y, 0}
+    border.screenspace     = ScreenType.SCREENSPACE_TRUE
+    border.use_mipfilter   = true
+    border.additive_alpha  = false
+    border.blend_mode      = blend_mode.IBM_REGULAR
+    border.h_clip_relation = h_clip_relations.NULL
+    border.level           = DEFAULT_LEVEL
+    border.vertices        = {{-hw, -hh}, {hw, -hh}, {hw, hh}, {-hw, hh}, {-hw, -hh}}
+    border.indices         = {0, 1, 1, 2, 2, 3, 3, 4}
+    border.thickness       = 4.0
+    AddElement(border)
+
+    -- 4. Military corner brackets
+    local cLen = 0.08
+    local corners = {
+        {{-hw, -hh + cLen}, {-hw, -hh}, {-hw + cLen, -hh}},
+        {{ hw - cLen, -hh}, { hw, -hh}, { hw, -hh + cLen}},
+        {{ hw,  hh - cLen}, { hw,  hh}, { hw - cLen,  hh}},
+        {{-hw + cLen,  hh}, {-hw,  hh}, {-hw,  hh - cLen}},
+    }
+    for ci, cverts in ipairs(corners) do
+        local cAcc           = CreateElement "ceSMultiLine"
+        cAcc.name            = name .. "_c" .. ci
+        cAcc.material        = matCyan
+        cAcc.init_pos        = {x, y, 0}
+        cAcc.screenspace     = ScreenType.SCREENSPACE_TRUE
+        cAcc.use_mipfilter   = true
+        cAcc.additive_alpha  = false
+        cAcc.blend_mode      = blend_mode.IBM_REGULAR
+        cAcc.h_clip_relation = h_clip_relations.NULL
+        cAcc.level           = DEFAULT_LEVEL + 1
+        cAcc.vertices        = cverts
+        cAcc.indices         = {0, 1, 1, 2}
+        cAcc.thickness       = 4.5
+        AddElement(cAcc)
+    end
+
+    -- 5. Crosshair reticle inside the sensor MFD window
+    local retGap = 0.025
+    local retArm = 0.110
+    addDualLine(name .. "_ch_l", {x - retArm, y}, {x - retGap, y}, 2.4, matGreen)
+    addDualLine(name .. "_ch_r", {x + retGap, y}, {x + retArm, y}, 2.4, matGreen)
+    addDualLine(name .. "_ch_b", {x, y - retArm}, {x, y - retGap}, 2.4, matGreen)
+    addDualLine(name .. "_ch_t", {x, y + retGap}, {x, y + retArm}, 2.4, matGreen)
+    addDot(name .. "_pip", 0.0035, {x, y}, matGreen)
+
+    -- 6. Tactical labels on sensor frame
+    addStaticText(name .. "_lbl_tl", "MTS-B SENSOR [MFD]", {x - hw + 0.04, y + hh - 0.035}, "LeftCenter",  fontCyan,     {0.0015, 0.0015, 0, 0})
+    addStaticText(name .. "_lbl_tr", "MAG: 23x",          {x + hw - 0.04, y + hh - 0.035}, "RightCenter", fontGreen,    {0.0015, 0.0015, 0, 0})
+    addStaticText(name .. "_lbl_bl", "FOV: NARROW",       {x - hw + 0.04, y - hh + 0.035}, "LeftCenter",  fontGreenDim, {0.0015, 0.0015, 0, 0})
+    addStaticText(name .. "_lbl_br", "SLAVED",            {x + hw - 0.04, y - hh + 0.035}, "RightCenter", fontAmber,    {0.0015, 0.0015, 0, 0})
 end

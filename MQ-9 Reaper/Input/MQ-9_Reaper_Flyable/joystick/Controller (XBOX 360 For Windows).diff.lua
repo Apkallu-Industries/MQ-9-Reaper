@@ -45,7 +45,7 @@ local diff = {
 		},
 		-- Right Stick Horizontal: Target Designator / Sensor Slew
 		["a2033cdnil"] = {
-			["name"] = "TDC / Sensor Target Slew Horizontal",
+			["name"] = "I-251 Slew Horizontal",
 			["changed"] = {
 				[1] = {
 					["key"] = "JOY_RX",
@@ -54,7 +54,7 @@ local diff = {
 						["curvature"] = { [1] = 0.35 },
 						["invert"] = false,
 						["saturationX"] = 1,
-						["saturationY"] = 0.50,
+						["saturationY"] = 1,
 						["slider"] = false,
 					},
 				},
@@ -62,16 +62,16 @@ local diff = {
 		},
 		-- Right Stick Vertical: Target Designator / Sensor Slew
 		["a2034cdnil"] = {
-			["name"] = "TDC / Sensor Target Slew Vertical",
+			["name"] = "I-251 Slew Vertical",
 			["changed"] = {
 				[1] = {
 					["key"] = "JOY_RY",
 					["filter"] = {
 						["deadzone"] = 0.08,
 						["curvature"] = { [1] = 0.35 },
-						["invert"] = true,
+						["invert"] = false,
 						["saturationX"] = 1,
-						["saturationY"] = 0.50,
+						["saturationY"] = 1,
 						["slider"] = false,
 					},
 				},
@@ -98,7 +98,7 @@ local diff = {
 			},
 		},
 		-- [X] Button: Target Lock / Point Track
-		["d83pnilu84cdnilvdnilvpnilvunil"] = {
+		["d100pnilu1627cdnilvdnilvpnilvunil"] = {
 			["name"] = "Target Lock",
 			["added"] = {
 				[1] = {
@@ -107,9 +107,18 @@ local diff = {
 			},
 		},
 		-- [Y] Button: Laser Ranger / Designator On/Off
-		["d136pnilunilcdnilvdnilvpnilvunil"] = {
+		["d392pnilunilcdnilvdnilvpnilvunil"] = {
 			["name"] = "Laser Ranger On/Off",
 			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN4",
+				},
+			},
+		},
+		-- Remove JOY_BTN4 from default Weapon Change to prevent conflicts
+		["d101pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Weapon Change",
+			["removed"] = {
 				[1] = {
 					["key"] = "JOY_BTN4",
 				},
@@ -119,6 +128,15 @@ local diff = {
 		["dnilp1033u1034cdnilvdnilvpnilvunil"] = {
 			["name"] = "Throttle Down",
 			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN5",
+				},
+			},
+		},
+		-- Remove JOY_BTN5 from default Cannon to prevent conflicts
+		["d113pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Cannon",
+			["removed"] = {
 				[1] = {
 					["key"] = "JOY_BTN5",
 				},
@@ -142,9 +160,9 @@ local diff = {
 				},
 			},
 		},
-		-- [Start / Menu] Button: Barometric Altitude Hold Autopilot
-		["d427pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Autopilot - Barometric Altitude Hold 'H'",
+		-- [Start / Menu] Button: Autopilot / Level & Altitude Hold
+		["d62pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Autopilot",
 			["added"] = {
 				[1] = {
 					["key"] = "JOY_BTN8",
@@ -161,7 +179,7 @@ local diff = {
 			},
 		},
 		-- [RS Click] (Right Stick Click): Target Unlock / Sensor Reset
-		["d1415pnilunilcdnilvdnilvpnilvunil"] = {
+		["d1635pnilunilcdnilvdnilvpnilvunil"] = {
 			["name"] = "Target Unlock",
 			["added"] = {
 				[1] = {
@@ -169,63 +187,48 @@ local diff = {
 				},
 			},
 		},
-		-- D-Pad Up: Sensor Zoom In
-		["d407pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Sensor Zoom In",
+		-- D-Pad Up: Display Zoom In (23x Telephoto)
+		["d104pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Display Zoom In",
 			["added"] = {
 				[1] = {
-					["key"] = "JOY_POV1_U",
-				},
-				[2] = {
 					["key"] = "JOY_BTN_POV1_U",
 				},
 			},
 		},
-		-- D-Pad Down: Sensor Zoom Out
-		["d408pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Sensor Zoom Out",
+		-- D-Pad Down: Display Zoom Out (1x Wide FOV)
+		["d105pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Display Zoom Out",
 			["added"] = {
 				[1] = {
-					["key"] = "JOY_POV1_D",
-				},
-				[2] = {
 					["key"] = "JOY_BTN_POV1_D",
 				},
 			},
 		},
-		-- D-Pad Left: Night Vision / FLIR Thermal WHOT/BHOT
-		["d1410pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Night Vision / FLIR",
+		-- D-Pad Left: Target Designator To Center
+		["d92pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Target Designator To Center",
 			["added"] = {
 				[1] = {
-					["key"] = "JOY_POV1_L",
-				},
-				[2] = {
 					["key"] = "JOY_BTN_POV1_L",
 				},
 			},
 		},
-		-- D-Pad Right: Change Weapon / Cycle Stores
-		["d109pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Change Weapon",
+		-- D-Pad Right: Night Vision (FLIR or LLTV) On/Off
+		["d393pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Night Vision (FLIR or LLTV) On/Off",
 			["added"] = {
 				[1] = {
-					["key"] = "JOY_POV1_R",
-				},
-				[2] = {
 					["key"] = "JOY_BTN_POV1_R",
 				},
 			},
 		},
-		-- Strip old slow view-slew off D-Pad so it exclusively controls zoom/thermal/weapon
+		-- Clear POV1 from slow camera panning so D-Pad exclusively drives the sensor
 		["dnilp32u214cdnilvdnilvpnilvunil"] = {
 			["name"] = "View Left slow",
 			["removed"] = {
 				[1] = {
 					["key"] = "JOY_BTN_POV1_L",
-				},
-				[2] = {
-					["key"] = "JOY_POV1_L",
 				},
 			},
 		},
@@ -235,9 +238,6 @@ local diff = {
 				[1] = {
 					["key"] = "JOY_BTN_POV1_R",
 				},
-				[2] = {
-					["key"] = "JOY_POV1_R",
-				},
 			},
 		},
 		["dnilp34u214cdnilvdnilvpnilvunil"] = {
@@ -246,9 +246,6 @@ local diff = {
 				[1] = {
 					["key"] = "JOY_BTN_POV1_U",
 				},
-				[2] = {
-					["key"] = "JOY_POV1_U",
-				},
 			},
 		},
 		["dnilp35u214cdnilvdnilvpnilvunil"] = {
@@ -256,9 +253,6 @@ local diff = {
 			["removed"] = {
 				[1] = {
 					["key"] = "JOY_BTN_POV1_D",
-				},
-				[2] = {
-					["key"] = "JOY_POV1_D",
 				},
 			},
 		},
