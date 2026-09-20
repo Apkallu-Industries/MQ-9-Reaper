@@ -34,35 +34,44 @@ local diff = {
 				},
 			},
 		},
-		-- Right Thumbstick Horizontal: Gimbal Camera Pan Left / Right (Tuned curve & saturation: no extreme whipping)
-		["a2010cdnil"] = {
-			["name"] = "Absolute Camera Horizontal View",
+		-- Remove shared trigger axis on Thrust to prevent 50% throttle snap on release
+		["a2004cdnil"] = {
+			["name"] = "Thrust",
+			["removed"] = {
+				[1] = {
+					["key"] = "JOY_Z",
+				},
+			},
+		},
+		-- Right Stick Horizontal: Target Designator / Sensor Slew
+		["a2033cdnil"] = {
+			["name"] = "TDC / Sensor Target Slew Horizontal",
 			["changed"] = {
 				[1] = {
 					["key"] = "JOY_RX",
 					["filter"] = {
 						["deadzone"] = 0.08,
-						["curvature"] = { [1] = 0.45 },
+						["curvature"] = { [1] = 0.35 },
 						["invert"] = false,
 						["saturationX"] = 1,
-						["saturationY"] = 0.40,
+						["saturationY"] = 0.50,
 						["slider"] = false,
 					},
 				},
 			},
 		},
-		-- Right Thumbstick Vertical: Gimbal Camera Tilt Up / Down
-		["a2011cdnil"] = {
-			["name"] = "Absolute Camera Vertical View",
+		-- Right Stick Vertical: Target Designator / Sensor Slew
+		["a2034cdnil"] = {
+			["name"] = "TDC / Sensor Target Slew Vertical",
 			["changed"] = {
 				[1] = {
 					["key"] = "JOY_RY",
 					["filter"] = {
 						["deadzone"] = 0.08,
-						["curvature"] = { [1] = 0.45 },
+						["curvature"] = { [1] = 0.35 },
 						["invert"] = true,
 						["saturationX"] = 1,
-						["saturationY"] = 0.40,
+						["saturationY"] = 0.50,
 						["slider"] = false,
 					},
 				},
@@ -70,25 +79,16 @@ local diff = {
 		},
 	},
 	["keyDiffs"] = {
-		-- [RS Click] (Right Stick Click): Recenter Camera to Forward Flight View
-		["d49pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Center Camera View",
-			["added"] = {
-				[1] = {
-					["key"] = "JOY_BTN10",
-				},
-			},
-		},
-		-- [A] Button: Weapon Release (Launch Hellfire)
-		["d85pnilu86cdnilvdnilvpnilvunil"] = {
-			["name"] = "Weapon Release",
+		-- [A] Button: Weapon Fire / Release (Hold 1-2s for Hellfire missile launch)
+		["d84pnilu85cdnilvdnilvpnilvunil"] = {
+			["name"] = "Weapon Fire",
 			["added"] = {
 				[1] = {
 					["key"] = "JOY_BTN1",
 				},
 			},
 		},
-		-- [B] Button: Optical Sensor On/Off
+		-- [B] Button: Electro-Optical System / Sensor Camera On/Off
 		["d87pnilunilcdnilvdnilvpnilvunil"] = {
 			["name"] = "Electro-Optical System On/Off",
 			["added"] = {
@@ -97,7 +97,7 @@ local diff = {
 				},
 			},
 		},
-		-- [X] Button: Target Lock
+		-- [X] Button: Target Lock / Point Track
 		["d83pnilu84cdnilvdnilvpnilvunil"] = {
 			["name"] = "Target Lock",
 			["added"] = {
@@ -112,30 +112,65 @@ local diff = {
 			["added"] = {
 				[1] = {
 					["key"] = "JOY_BTN4",
-					["reformers"] = {},
 				},
 			},
 		},
-		-- [LB] Button: Sensor Zoom Out
-		["d408pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Sensor Zoom Out",
+		-- [LB] Button: Throttle Down / Speed Decrease
+		["dnilp1033u1034cdnilvdnilvpnilvunil"] = {
+			["name"] = "Throttle Down",
 			["added"] = {
 				[1] = {
 					["key"] = "JOY_BTN5",
 				},
 			},
 		},
-		-- [RB] Button: Sensor Zoom In
-		["d407pnilunilcdnilvdnilvpnilvunil"] = {
-			["name"] = "Sensor Zoom In",
+		-- [RB] Button: Throttle Up / Speed Increase
+		["dnilp1032u1034cdnilvdnilvpnilvunil"] = {
+			["name"] = "Throttle Up",
 			["added"] = {
 				[1] = {
 					["key"] = "JOY_BTN6",
 				},
 			},
 		},
+		-- [Back / View] Button: Target Designator To Center
+		["d92pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Target Designator To Center",
+			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN7",
+				},
+			},
+		},
+		-- [Start / Menu] Button: Barometric Altitude Hold Autopilot
+		["d427pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Autopilot - Barometric Altitude Hold 'H'",
+			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN8",
+				},
+			},
+		},
+		-- [LS Click] (Left Stick Click): Air-To-Ground Combat Mode 7
+		["d111pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "(7) Air-To-Ground Mode",
+			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN9",
+				},
+			},
+		},
+		-- [RS Click] (Right Stick Click): Target Unlock / Sensor Reset
+		["d1415pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Target Unlock",
+			["added"] = {
+				[1] = {
+					["key"] = "JOY_BTN10",
+				},
+			},
+		},
 		-- D-Pad Up: Sensor Zoom In
-		["d407pnilunilcdnilvdnilvpnilvunil_dpad"] = {
+		["d407pnilunilcdnilvdnilvpnilvunil"] = {
 			["name"] = "Sensor Zoom In",
 			["added"] = {
 				[1] = {
@@ -147,7 +182,7 @@ local diff = {
 			},
 		},
 		-- D-Pad Down: Sensor Zoom Out
-		["d408pnilunilcdnilvdnilvpnilvunil_dpad"] = {
+		["d408pnilunilcdnilvdnilvpnilvunil"] = {
 			["name"] = "Sensor Zoom Out",
 			["added"] = {
 				[1] = {
@@ -170,7 +205,19 @@ local diff = {
 				},
 			},
 		},
-		-- EXPLICIT REMOVAL: Strip default View Slew off D-Pad so it no longer turns the camera
+		-- D-Pad Right: Change Weapon / Cycle Stores
+		["d109pnilunilcdnilvdnilvpnilvunil"] = {
+			["name"] = "Change Weapon",
+			["added"] = {
+				[1] = {
+					["key"] = "JOY_POV1_R",
+				},
+				[2] = {
+					["key"] = "JOY_BTN_POV1_R",
+				},
+			},
+		},
+		-- Strip old slow view-slew off D-Pad so it exclusively controls zoom/thermal/weapon
 		["dnilp32u214cdnilvdnilvpnilvunil"] = {
 			["name"] = "View Left slow",
 			["removed"] = {

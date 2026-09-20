@@ -170,6 +170,11 @@ Reaper =  {
 				
              }
         ),
+		pylon(5, 0, 0.0, -0.6, 0.0, {use_full_connector_position = false},
+            {
+                { CLSID = "{B1EF6B0E-3D91-4047-A7A5-A99E7D8B4A8B}" }, -- Mercury LLTV / FLIR Night Vision Pod (enables FLIR/Night TV on Shkval)
+            }
+        ),
     },
 	EPLRS = true,
 	Tasks = {

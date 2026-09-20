@@ -70,7 +70,7 @@ local function initReaperGCS()
         local blueGroups = coalition.getGroups(coalition.side.BLUE, Group.Category.AIRPLANE)
         for _, g in ipairs(blueGroups) do
             for _, u in ipairs(g:getUnits()) do
-                if u:isExist() and (u:getTypeName() == "MQ-9_Reaper" or u:getTypeName() == "MQ-9 Reaper") then
+                if u:isExist() and (u:getTypeName() == "MQ-9_Reaper_Flyable" or u:getTypeName() == "MQ-9_Reaper" or u:getTypeName() == "MQ-9 Reaper") then
                     return u:getController(), u
                 end
             end

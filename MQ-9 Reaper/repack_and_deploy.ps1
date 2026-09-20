@@ -71,53 +71,82 @@ foreach ($dcs in $dcsPaths) {
     }
 }
 
-Write-Host "[5/5] Deploying MQ-9 Reaper mod files..." -ForegroundColor Cyan
+Write-Host "[5/5] Deploying MQ-9 Reaper mod files & Controller Mappings..." -ForegroundColor Cyan
 foreach ($dcs in $dcsPaths) {
     if (Test-Path $dcs) {
-        $modDest = Join-Path $dcs "Mods\aircraft\MQ-9 Reaper"
-        try {
-            if (Test-Path $modDest) {
-                Remove-Item -Path $modDest -Recurse -Force
-            }
-            New-Item -ItemType Directory -Path $modDest -Force | Out-Null
+        $modDestinations = @(
+            (Join-Path $dcs "Mods\aircraft\MQ-9 Reaper Flyable"),
+            (Join-Path $dcs "Mods\aircraft\MQ-9 Reaper")
+        )
 
-            $itemsToCopy = @(
-                "Cockpit",
-                "Documents",
-                "ImagesGui",
-                "Input",
-                "Kneeboard",
-                "Liveries",
-                "Missions",
-                "Options",
-                "Shapes",
-                "Textures",
-                "Theme",
-                "MQ-9.lua",
-                "Views.lua",
-                "comm.lua",
-                "entry.lua",
-                "reaper_gcs_menu.lua"
-            )
+        $itemsToCopy = @(
+            "Cockpit",
+            "Documents",
+            "ImagesGui",
+            "Input",
+            "Kneeboard",
+            "Liveries",
+            "Missions",
+            "Options",
+            "Shapes",
+            "Textures",
+            "Theme",
+            "MQ-9.lua",
+            "Views.lua",
+            "comm.lua",
+            "entry.lua",
+            "reaper_gcs_menu.lua"
+        )
 
-            foreach ($item in $itemsToCopy) {
-                $src = Join-Path $scriptDir $item
-                if (Test-Path $src) {
-                    Copy-Item -Path $src -Destination $modDest -Recurse -Force
+        foreach ($modDest in $modDestinations) {
+            try {
+                if (Test-Path $modDest) {
+                    Remove-Item -Path $modDest -Recurse -Force
                 }
-            }
-            Write-Host "  -> Deployed clean mod to: $modDest" -ForegroundColor Green
+                New-Item -ItemType Directory -Path $modDest -Force | Out-Null
 
-            # Deploy Kneeboard chart directly to DCS user Kneeboard directory
-            $kbDest = Join-Path $dcs "Kneeboard\MQ-9_Reaper"
-            if (-not (Test-Path $kbDest)) {
-                New-Item -ItemType Directory -Path $kbDest -Force | Out-Null
+                foreach ($item in $itemsToCopy) {
+                    $src = Join-Path $scriptDir $item
+                    if (Test-Path $src) {
+                        Copy-Item -Path $src -Destination $modDest -Recurse -Force
+                    }
+                }
+                Write-Host "  -> Deployed clean mod to: $modDest" -ForegroundColor Green
+            } catch {
+                Write-Host "  -> Warning: Mod directory locked ($modDest). Will refresh upon DCS restart." -ForegroundColor Yellow
             }
-            Copy-Item (Join-Path $scriptDir "Kneeboard\*.png") $kbDest -Force
-            Write-Host "  -> Deployed squadron kneeboard to: $kbDest" -ForegroundColor Green
-        } catch {
-            Write-Host "  -> Warning: Some mod files locked by active DCS session. Files updated in local repo; will refresh fully upon DCS restart." -ForegroundColor Yellow
         }
+
+        # Deploy Controller Mapping directly to DCS Saved Games Config/Input profiles
+        $inputProfiles = @(
+            "MQ-9_Reaper_Flyable",
+            "MQ-9 Reaper",
+            "MQ-9_Reaper"
+        )
+        $diffSrc = Join-Path $scriptDir "Input\MQ-9_Reaper_Flyable\joystick\Controller (XBOX 360 For Windows).diff.lua"
+        if (Test-Path $diffSrc) {
+            foreach ($prof in $inputProfiles) {
+                $profJoyDir = Join-Path $dcs "Config\Input\$prof\joystick"
+                if (-not (Test-Path $profJoyDir)) {
+                    New-Item -ItemType Directory -Path $profJoyDir -Force | Out-Null
+                }
+                # Deploy with exact user hardware GUID
+                $guidDiff = Join-Path $profJoyDir "Controller (XBOX 360 For Windows) {5B15AC40-78A5-11f1-8001-444553540000}.diff.lua"
+                Copy-Item -Path $diffSrc -Destination $guidDiff -Force
+                # Also deploy generic diff for future auto-detection
+                $genDiff = Join-Path $profJoyDir "Controller (XBOX 360 For Windows).diff.lua"
+                Copy-Item -Path $diffSrc -Destination $genDiff -Force
+                Write-Host "  -> Deployed Xbox 360 controller profile to: $profJoyDir" -ForegroundColor Green
+            }
+        }
+
+        # Deploy Kneeboard chart directly to DCS user Kneeboard directory
+        $kbDest = Join-Path $dcs "Kneeboard\MQ-9_Reaper"
+        if (-not (Test-Path $kbDest)) {
+            New-Item -ItemType Directory -Path $kbDest -Force | Out-Null
+        }
+        Copy-Item (Join-Path $scriptDir "Kneeboard\*.png") $kbDest -Force
+        Write-Host "  -> Deployed squadron kneeboard to: $kbDest" -ForegroundColor Green
     }
 }
 
