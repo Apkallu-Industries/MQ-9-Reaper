@@ -2,12 +2,14 @@ local self_ID = "MQ-9 Reaper Flyable"
 declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
-developerName   = "Eagle Dynamics / Apkallu Industries",
+shortName       = "MQ-9_Reaper_Flyable",
+developerName   = "Blacknet Systems",
 
 image     	    = "FC3.bmp",
 installed 	    = true,
 dirName	  	    = current_mod_path,
-fileMenuName    = _("MQ-9 Reaper"),
+fileMenuName    = _("MQ-9 Reaper Flyable"),
+update_id       = "MQ-9_Reaper_Flyable",
 
 version		    = "0.0.1v",
 state		    = "installed",
@@ -15,24 +17,23 @@ info		    = _("General Atomics MQ-9 Reaper Unmanned Aerial Vehicle (Flyable Mod)
 
 InputProfiles =
 {
-    ["MQ-9_Reaper"] = current_mod_path .. '/Input/MQ-9 Reaper',
-    ["MQ-9 Reaper"] = current_mod_path .. '/Input/MQ-9 Reaper',
+    ["MQ-9_Reaper_Flyable"] = current_mod_path .. '/Input/MQ-9_Reaper_Flyable',
 },
 
 Options =
 {
     {
-        name   = _("MQ-9 Reaper"),
-        nameId = "MQ-9_Reaper",
+        name   = _("MQ-9 Reaper Flyable"),
+        nameId = "MQ-9_Reaper_Flyable",
         dir    = "Options",
-        CLSID  = "{MQ-9_Reaper options}"
+        CLSID  = "{MQ-9_Reaper_Flyable options}"
     },
 },
 
 Skins =
 	{
 		{
-			name	= _("MQ-9 Reaper"),
+			name	= _("MQ-9 Reaper Flyable"),
 			dir		= "Theme"
 		},
 	},
@@ -40,21 +41,16 @@ Skins =
 Missions =
 	{
 		{
-			name		    = _("MQ-9 Reaper"),
+			name		    = _("MQ-9 Reaper Flyable"),
 			dir			    = "Missions",
-            training_ids    = {EN = 'SU-25T_video_EN', RU = 'SU-25T_video_RU'},
 		},
 	},		
 
 LogBook =
 	{
 		{
-			name		= _("MQ-9_Reaper"),
-			type		= "MQ-9_Reaper",
-		},
-		{
-			name		= _("MQ-9 Reaper"),
-			type		= "MQ-9 Reaper",
+			name		= _("MQ-9 Reaper Flyable"),
+			type		= "MQ-9_Reaper_Flyable",
 		},
 	},		
 })
@@ -70,14 +66,14 @@ mount_vfs_liveries_path(current_mod_path ..  "/Liveries")
 
 local support_cockpit = current_mod_path .. '/Cockpit/Scripts/'
 
-dofile(current_mod_path .. "/Views.lua")
+-- Flyable registration on Su-25T CWS shell
+make_flyable('MQ-9_Reaper_Flyable', support_cockpit, {nil, old = 54}, current_mod_path .. '/comm.lua')
+
+-- Load aircraft descriptor into DCS database
 dofile(current_mod_path .. "/MQ-9.lua")
 
-----------------------------------------------------------------------------------------
--- Flyable registration & View settings
-make_view_settings('MQ-9_Reaper', ViewSettings, SnapViews)
+-- Load and attach view settings
+dofile(current_mod_path .. "/Views.lua")
+make_view_settings('MQ-9_Reaper_Flyable', ViewSettings, SnapViews)
 
--- Standard flyable registration on Su-25T CWS shell
-make_flyable('MQ-9_Reaper', support_cockpit, {nil, old = 54}, current_mod_path .. '/comm.lua')
-----------------------------------------------------------------------------------------
 plugin_done()

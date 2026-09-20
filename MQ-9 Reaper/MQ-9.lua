@@ -3,7 +3,7 @@
 
 Reaper =  {
         
-	Name 				=   'MQ-9_Reaper',
+	Name 				=   'MQ-9_Reaper_Flyable',
 	DisplayName			= _('MQ-9 Reaper (Flyable)'),
 	Picture 			= "MQ-9_Reaper.png",
 	Rate 				=  40, -- RewardPoint in Multiplayer
@@ -16,7 +16,7 @@ Reaper =  {
 			vis   	 	= 3; -- visibility gain.
 			desrt    	= 'self'; -- Name of destroyed object file name
 			fire  	 	= { 300, 2}; -- Fire on the ground after destoyed: 300sec 2m
-			username	= 'MQ-9_Reaper';
+			username	= 'MQ-9_Reaper_Flyable';
 			index    	=  WSTYPE_PLACEHOLDER;
 			classname 	= "lLandPlane";
 			positioning = "BYNORMAL";
