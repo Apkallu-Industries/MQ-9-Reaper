@@ -11,7 +11,7 @@ $installedCount = 0
 foreach ($dcsRoot in $possibleDCSPaths) {
     if (Test-Path $dcsRoot) {
         $destParent = Join-Path $dcsRoot "Mods\aircraft"
-        $target = Join-Path $destParent "MQ-9 Reaper"
+        $target = Join-Path $destParent "MQ-9 Reaper Flyable"
 
         if (-not (Test-Path $destParent)) {
             New-Item -ItemType Directory -Path $destParent -Force | Out-Null
@@ -41,7 +41,7 @@ foreach ($dcsRoot in $possibleDCSPaths) {
 
 if ($installedCount -eq 0) {
     # Default to standard DCS if neither directory existed yet
-    $defaultDest = "$HOME\Saved Games\DCS\Mods\aircraft\MQ-9 Reaper"
+    $defaultDest = "$HOME\Saved Games\DCS\Mods\aircraft\MQ-9 Reaper Flyable"
     New-Item -ItemType Directory -Path (Split-Path $defaultDest) -Force | Out-Null
     Copy-Item -Path $source -Destination $defaultDest -Recurse -Force
     Write-Host "Successfully deployed MQ-9 Reaper mod to: $defaultDest"

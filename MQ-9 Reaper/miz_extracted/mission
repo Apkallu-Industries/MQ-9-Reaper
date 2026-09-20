@@ -360,7 +360,7 @@ mission =
                                     {
                                         ["unitId"] = 1,
                                         ["name"] = "Reaper-1-1",
-                                        ["type"] = "MQ-9_Reaper",
+                                        ["type"] = "MQ-9_Reaper_Flyable",
                                         ["skill"] = "Player",
                                         ["heading"] = 0,
                                         ["psi"] = 0,

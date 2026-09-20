@@ -75,8 +75,7 @@ Write-Host "[5/5] Deploying MQ-9 Reaper mod files & Controller Mappings..." -For
 foreach ($dcs in $dcsPaths) {
     if (Test-Path $dcs) {
         $modDestinations = @(
-            (Join-Path $dcs "Mods\aircraft\MQ-9 Reaper Flyable"),
-            (Join-Path $dcs "Mods\aircraft\MQ-9 Reaper")
+            (Join-Path $dcs "Mods\aircraft\MQ-9 Reaper Flyable")
         )
 
         $itemsToCopy = @(
@@ -119,9 +118,7 @@ foreach ($dcs in $dcsPaths) {
 
         # Deploy Controller Mapping directly to DCS Saved Games Config/Input profiles
         $inputProfiles = @(
-            "MQ-9_Reaper_Flyable",
-            "MQ-9 Reaper",
-            "MQ-9_Reaper"
+            "MQ-9_Reaper_Flyable"
         )
         $diffSrc = Join-Path $scriptDir "Input\MQ-9_Reaper_Flyable\joystick\Controller (XBOX 360 For Windows).diff.lua"
         if (Test-Path $diffSrc) {
@@ -141,7 +138,7 @@ foreach ($dcs in $dcsPaths) {
         }
 
         # Deploy Kneeboard chart directly to DCS user Kneeboard directory
-        $kbDest = Join-Path $dcs "Kneeboard\MQ-9_Reaper"
+        $kbDest = Join-Path $dcs "Kneeboard\MQ-9_Reaper_Flyable"
         if (-not (Test-Path $kbDest)) {
             New-Item -ItemType Directory -Path $kbDest -Force | Out-Null
         }
