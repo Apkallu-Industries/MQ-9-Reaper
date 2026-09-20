@@ -15,28 +15,32 @@ HUD_PANEL_BG     = {  8,  14,  22, 215} -- Solid dark tactical visor backing
 HUD_PANEL_BORDER = {  0,   0,   0, 255} -- Bold thick solid black outline
 HUD_SHADOW       = {  0,   0,   0, 240}
 
-matBlack        = MakeMaterial(nil, HUD_BLACK)
-matWhite        = MakeMaterial(nil, HUD_WHITE)
-matGreen        = MakeMaterial(nil, HUD_GREEN)
-matGreenDim     = MakeMaterial(nil, HUD_GREEN_DIM)
-matCyan         = MakeMaterial(nil, HUD_CYAN)
-matAmber        = MakeMaterial(nil, HUD_AMBER)
-matPanelBg      = MakeMaterial(nil, HUD_PANEL_BG)
-matBorder       = MakeMaterial(nil, HUD_PANEL_BORDER)
-matShadow       = MakeMaterial(nil, HUD_SHADOW)
+if not matBlack then
+    matBlack        = MakeMaterial(nil, HUD_BLACK)
+    matWhite        = MakeMaterial(nil, HUD_WHITE)
+    matGreen        = MakeMaterial(nil, HUD_GREEN)
+    matGreenDim     = MakeMaterial(nil, HUD_GREEN_DIM)
+    matCyan         = MakeMaterial(nil, HUD_CYAN)
+    matAmber        = MakeMaterial(nil, HUD_AMBER)
+    matPanelBg      = MakeMaterial(nil, HUD_PANEL_BG)
+    matBorder       = MakeMaterial(nil, HUD_PANEL_BORDER)
+    matShadow       = MakeMaterial(nil, HUD_SHADOW)
 
-fontWhite    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_WHITE, "fontWhite")
-fontGreen    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_GREEN, "fontGreen")
-fontGreenDim = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_GREEN_DIM, "fontGreenDim")
-fontCyan     = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_CYAN, "fontCyan")
-fontAmber    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_AMBER, "fontAmber")
+    fontWhite    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_WHITE, "fontWhite")
+    fontGreen    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_GREEN, "fontGreen")
+    fontGreenDim = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_GREEN_DIM, "fontGreenDim")
+    fontCyan     = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_CYAN, "fontCyan")
+    fontAmber    = MakeFont({used_DXUnicodeFontData = "font_dejavu_lgc_sans_22_white"}, HUD_AMBER, "fontAmber")
+end
 
 -- Root indicator anchor (Always visible in drone flight & sensor view)
-gcs_root           = CreateElement "ceSimple"
-gcs_root.name      = "gcs_hud_root"
-gcs_root.init_pos  = {0, 0, 0}
-gcs_root.screenspace = ScreenType.SCREENSPACE_TRUE
-Add(gcs_root)
+if not gcs_root then
+    gcs_root             = CreateElement "ceSimple"
+    gcs_root.name        = "gcs_hud_root"
+    gcs_root.init_pos    = {0, 0, 0}
+    gcs_root.screenspace = ScreenType.SCREENSPACE_TRUE
+    Add(gcs_root)
+end
 
 function AddElement(object)
     object.screenspace = ScreenType.SCREENSPACE_TRUE

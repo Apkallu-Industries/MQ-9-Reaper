@@ -74,16 +74,10 @@ dofile(current_mod_path .. "/Views.lua")
 dofile(current_mod_path .. "/MQ-9.lua")
 
 ----------------------------------------------------------------------------------------
--- ORDER MATTERS: register the flyable FIRST, then attach its view settings.
--- make_view_settings() must target a unit that is already flyable; calling it
--- before make_flyable aborts entry.lua before plugin_done(), which leaves the
--- aircraft "installed" (declare_plugin ran) but MISSING from the Mission Editor.
-if MAC_flyable then
-    MAC_flyable('MQ-9_Reaper', support_cockpit, nil, current_mod_path .. '/comm.lua')
-else
-    make_flyable('MQ-9_Reaper', support_cockpit, nil, current_mod_path .. '/comm.lua')
-end
-
+-- Flyable registration & View settings
 make_view_settings('MQ-9_Reaper', ViewSettings, SnapViews)
+
+-- Standard flyable registration on Su-25T CWS shell
+make_flyable('MQ-9_Reaper', support_cockpit, {nil, old = 54}, current_mod_path .. '/comm.lua')
 ----------------------------------------------------------------------------------------
 plugin_done()

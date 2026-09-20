@@ -69,7 +69,7 @@ local CMD_AXIS_RADAR_V    = 2028 -- Joystick rotate radar up/down
 local CMD_AXIS_VIEW_H     = 2010 -- Absolute Camera Horizontal View
 local CMD_AXIS_VIEW_V     = 2011 -- Absolute Camera Vertical View
 
--- Register listeners
+-- Register discrete listeners (axis commands 2000+ are handled by input system, not dev:listen_command)
 dev:listen_command(CMD_RADAR_UP)
 dev:listen_command(CMD_RADAR_DOWN)
 dev:listen_command(CMD_RADAR_LEFT)
@@ -84,15 +84,7 @@ dev:listen_command(CMD_VIEW_LEFT)
 dev:listen_command(CMD_VIEW_RIGHT)
 dev:listen_command(CMD_VIEW_CENTER)
 dev:listen_command(CMD_VIEW_STOP)
-dev:listen_command(CMD_VIEW_F1)
 dev:listen_command(CMD_VIEW_HUD_ONLY)
-
-dev:listen_command(CMD_AXIS_SELECT_H)
-dev:listen_command(CMD_AXIS_SELECT_V)
-dev:listen_command(CMD_AXIS_RADAR_H)
-dev:listen_command(CMD_AXIS_RADAR_V)
-dev:listen_command(CMD_AXIS_VIEW_H)
-dev:listen_command(CMD_AXIS_VIEW_V)
 
 function SetCommand(command, value)
     -- Right Thumbstick / Slew Vertical Axis (JOY_RY)
