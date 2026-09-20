@@ -53,8 +53,8 @@ Reaper =  {
 	has_speedbrake 				= false, -- Speedbrake yes/no
 	has_differential_stabilizer	= false, -- differential stabilizers
 	
-	nose_gear_pos 				= {2.504 , -1.94,	0}, -- nosegear coord
-	main_gear_pos 				= {-0.628, -2.046,  1.888}, -- main gear coords
+	nose_gear_pos 				= {2.504 , -1.94, 0}, -- nosegear coord
+	main_gear_pos 				= {-0.628, -2.046, 1.888}, -- main gear coords
 	
 	nose_gear_amortizer_direct_stroke    	 =  0,  -- down from nose_gear_pos !!!
 	nose_gear_amortizer_reversal_stroke  	 = -0.196,  -- up 
