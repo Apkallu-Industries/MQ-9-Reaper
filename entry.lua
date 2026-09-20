@@ -2,7 +2,7 @@ local self_ID = "MQ-9 Reaper Flyable"
 declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
-developerName   = "Eagle Dynamics / Yutani Industries",
+developerName   = "Blacknet Systems",
 
 image     	    = "FC3.bmp",
 installed 	    = true,
@@ -72,13 +72,18 @@ local support_cockpit = current_mod_path .. '/Cockpit/Scripts/'
 
 dofile(current_mod_path .. "/Views.lua")
 dofile(current_mod_path .. "/MQ-9.lua")
-make_view_settings('MQ-9_Reaper', ViewSettings, SnapViews)
 
 ----------------------------------------------------------------------------------------
+-- ORDER MATTERS: register the flyable FIRST, then attach its view settings.
+-- make_view_settings() must target a unit that is already flyable; calling it
+-- before make_flyable aborts entry.lua before plugin_done(), which leaves the
+-- aircraft "installed" (declare_plugin ran) but MISSING from the Mission Editor.
 if MAC_flyable then
     MAC_flyable('MQ-9_Reaper', support_cockpit, nil, current_mod_path .. '/comm.lua')
 else
     make_flyable('MQ-9_Reaper', support_cockpit, nil, current_mod_path .. '/comm.lua')
 end
+
+make_view_settings('MQ-9_Reaper', ViewSettings, SnapViews)
 ----------------------------------------------------------------------------------------
 plugin_done()
