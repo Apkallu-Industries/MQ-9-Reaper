@@ -11,10 +11,17 @@ DCS-AI-Frontline fault registry, `docs/DCS_MISSION_HANGS_AND_LUA_ERRORS.md`, row
 Repaired with `python tools/miz_fix.py --no-backup <miz>` (alt_type BARO, callsign Enfield11). Not seen crashing in DCS
 yet; found statically.
 
-Not changed (outside Git, owner to decide): the ADAP copy
-`C:\Dev\AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper\Missions\Single\MQ-9_Reaper_Combat_Patrol.miz` has the same two
-faults (run `tools/miz_fix.py` on it), and the stale `AutonomousDronePack\DCS Content\MQ-9 Reaper` copy has no aircraft
-and no `coalitions` table at all (replace it with the fixed mission or delete it).
+ADAP copies (outside Git), fixed 2026-10-07 in the sixth scheduled run, originals kept in
+`C:\Dev\AutonomousDronePack\_backups\2026-10-07_run6\`:
+
+- `AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper\Missions\Single\MQ-9_Reaper_Combat_Patrol.miz` (canonical): same three
+  #1 and one #14 faults; repaired with `tools/miz_fix.py`.
+- The stale `AutonomousDronePack\DCS Content\MQ-9 Reaper` copy (no aircraft, no `coalitions` table, no
+  `mission.coalition`): replaced with the repaired canonical mission.
+- `miz_check` on both: `MIZ_CHECK_PASS`.
+- Not done (the PC's permission check refused the edit; owner to apply): `developerName` in the ADAP `entry.lua`
+  files still reads `"Blacknet Systems"` (canonical) and `"Eagle Dynamics / Apkallu Industries"` (DCS Content); both
+  should be `"Eagle Dynamics / Yutani Industries"` as in this repo.
 
 ## `MQ9_CLAUDE_TEST_AI_Flight.miz` (AI smoke test)
 
