@@ -39,6 +39,9 @@ Derived from the BNS B-2 EFM (Apkallu-Industries/B-2-Spirit, `efm/`).
 | Engine failure glide | L/D 17.4 at 90 KTAS |
 | Propeller hit / left outer wing lost | engine stops / FCC holds the wings within 2.5 deg |
 
+Re-run on the scheduled run of 2026-10-07 (05:10 local): `build.bat` BUILD_OK against `D:\Eagle Dynamics\DCS World\API`,
+rig `SIM_TEST_PASS - 0 failed`. Branch pushed and PR opened for the owner (it had only been committed locally).
+
 ## Not done / to check
 
 - Never flown in DCS; the Su-25T shell (`old = 54`) stays in use until `BNS_MQ9_USE_EFM = true`.
