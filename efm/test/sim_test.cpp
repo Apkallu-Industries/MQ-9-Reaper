@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
     check(std::fabs(s.pos.y - 7600) < 30, "holds 7,600 m", fmt("h %.0f m, AoA %.1f deg, V %.0f kt", s.pos.y, s.aoa() * D, s.V_() / KT));
     check(g_thr < 0.95, "200 kt needs less than max power", fmt("throttle %.2f", g_thr));
     double ff = total_ff(d) * 3600;
-    check(ff > 50 && ff < 160, "fuel flow 50..160 kg/h (11..36 h on 1,814 kg)", fmt("%.0f kg/h", ff));
+    check(ff > 50 && ff < 180, "fuel flow 50..180 kg/h (10..36 h on 1,814 kg)", fmt("%.0f kg/h", ff));
     Rec r = run(s, 60, [&](double) { d.cmd(2001, 0); d.cmd(2002, 0); });
     check(!r.nan && std::fabs(s.pos.y - 7600) < 150 && r.maxroll < 5, "hands-off 60 s: FCC holds attitude and wings level",
           fmt("dh %+.0f m, max |roll| %.1f deg", s.pos.y - 7600, r.maxroll));
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
     std::printf("[2] top speed: max power, 7,600 m, 4,200 kg, level\n");
     s.set_mass(4200);
     start(d, s, 7600, 200 * KT, 1.0, 300);
-    check(s.V_() / KT > 205 && s.V_() / KT < 265, "about 240 KTAS (205..265)", fmt("%.0f KTAS", s.V_() / KT));
+    check(s.V_() / KT > 228 && s.V_() / KT < 252, "240 KTAS +/- 5 % (GA-ASI / NAVAIR max 240 KTAS)", fmt("%.0f KTAS", s.V_() / KT));
 
     std::printf("[3] ceiling: max power, 15,240 m (50,000 ft), 3,300 kg\n");
     s.set_mass(3300);
@@ -240,6 +240,19 @@ int main(int argc, char** argv) {
     d.dmg(23, 0.0); double hh = s.pos.y, i8 = 0, t8 = 0;
     r = run(s, 20, [&](double) { hold(d, s, hh, 0, i8, t8); d.cmd(2002, 0); });
     check(!r.nan && r.maxroll < 25, "rolls left but the FCC catches it", fmt("max |roll| %.1f deg, now %+.1f", r.maxroll, s.roll() * D));
+
+    // [9] loiter endurance. GA-ASI and NAVAIR quote "over 27 hours" / max endurance 27 h for the MQ-9A (NAVAIR fuel
+    // 3,900 lb; the EFM keeps the USAF fact sheet's 4,000 lb = 1,814 kg). Loiter at 6,100 m (20,000 ft), clean, at a
+    // mid-mission weight of 3,300 kg (empty 2,223 kg + about half the fuel + internal sensors), 110 KTAS [EST: loiter
+    // speed and altitude are not published]. Endurance = 1,814 kg / loiter fuel flow; the band allows the drop in
+    // flow as weight burns off and the climb/descent fuel that a constant-weight point leaves out.
+    std::printf("[9] loiter: 6,100 m (20,000 ft), 3,300 kg, 110 KTAS on the autothrottle\n");
+    s.set_mass(3300);
+    start(d, s, 6100, 110 * KT, 0.3, 240, 110 * KT);
+    double ffl = total_ff(d) * 3600, endur = 1814.0 / std::fmax(ffl, 1e-3);
+    check(std::fabs(s.pos.y - 6100) < 30 && std::fabs(s.V_() / KT - 110) < 3, "holds 6,100 m at 110 KTAS",
+          fmt("h %.0f m, V %.0f kt, throttle %.2f, AoA %.1f deg", s.pos.y, s.V_() / KT, g_thr, s.aoa() * D));
+    check(endur > 22 && endur < 40, "loiter endurance 22..40 h on 1,814 kg (published: 27 h)", fmt("%.0f kg/h, %.1f h", ffl, endur));
 
     std::printf("\n%s - %d failed\n", g_fail ? "SIM_TEST_FAIL" : "SIM_TEST_PASS", g_fail);
     return g_fail ? 1 : 0;

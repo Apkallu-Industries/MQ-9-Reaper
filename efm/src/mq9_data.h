@@ -23,8 +23,9 @@ const double ALPHA_STALL = 13.0 * D2R;
 const double CL_DE = 0.02;           // ruddervators: small lift change
 const double CL_FLAP = 0.35;
 
-// drag [EST]: L/D max about 20; CD0 set so max power gives about 240 KTAS at 25,000 ft
-const double CD0 = 0.030;          // sensor ball, antennas, pylons
+// drag [EST]: CD0 set so max power gives 240 KTAS at 25,000 ft (GA-ASI and NAVAIR MQ-9A data: max 240 KTAS).
+// 0.030 gave 260 KTAS in the rig (2026-10-07); 0.038 brings it to the published figure.
+const double CD0 = 0.038;          // sensor ball, antennas, pylons
 const double OSWALD = 0.85;
 const double CD_GEAR = 0.012;
 const double CD_FLAP = 0.020;
@@ -55,7 +56,9 @@ const double PROP_ETA = 0.80;         // cruise efficiency [EST]
 const double IDLE_POWER = 0.07;       // [EST]
 const double POWER_RATE = 0.8;        // fraction per second [EST]
 const double START_TIME = 40.0;       // s [EST]
-const double BSFC = 0.56;             // lb / shp / h [EST, TPE331 class]
+const double BSFC = 0.56;             // lb / shp / h at rated power [EST, TPE331 class]
+const double FF_ZERO = 0.12;          // [EST] Willans-line fuel flow at zero shaft power, fraction of rated flow; set
+                                      // so a 20,000 ft / 110 KTAS loiter gives the published 27 h (rig check [9])
 const double ENG_X = -4.5, ENG_Y = 0.15, ENG_Z = 0.0;   // pusher propeller [EST]
 const double PROP_RPM = 2000.0;       // [EST] for the rpm gauges
 

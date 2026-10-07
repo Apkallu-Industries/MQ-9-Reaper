@@ -82,8 +82,11 @@ void engine(double dt) {
         double t_static = 0.8 * std::cbrt(e.power * e.power * 2.0 * st.rho * A);
         double V = std::fmax(st.V, 1.0);
         e.thrust = std::fmin(t_static, PROP_ETA * e.power / V);
-        double shp = e.power / 745.7;
-        e.ff = std::fmax(0.004, shp * BSFC / 2.2046 / 3600.0);   // kg/s
+        // part-power fuel flow on a Willans line: BSFC is the rated-point figure, and a gas turbine still burns
+        // FF_ZERO of its rated flow at zero shaft power, so specific consumption rises as power comes back
+        double rated_shp = P0 * avail / 745.7;
+        double pf = rated_shp > 0 ? e.power / (P0 * avail) : 0.0;
+        e.ff = std::fmax(0.004, rated_shp * BSFC / 2.2046 / 3600.0 * (FF_ZERO + (1.0 - FF_ZERO) * pf));   // kg/s
     }
     e.phase = std::fmod(e.phase + e.rpm / 60.0 * dt, 1.0);
 }
