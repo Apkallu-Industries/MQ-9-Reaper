@@ -218,3 +218,15 @@ Engineered an authentic, military-grade **MTS-B Screenspace Targeting HUD** in `
 | **Kneeboard** | Missing path (Caused CTD) | High-res 432d Wing combat briefing sheet (`RShift + K`) |
 | **Heraldry & Livery** | Generic low-res textures | 432d Attack Wing "Mors Ab Alto" insignia & liveries |
 | **Build Pipeline** | Manual zip compression with backslashes | Automated POSIX forward-slash build & validation script |
+
+---
+
+## Fault: tail surfaces never animate (2026-10-07, fixed in the EFM on `efm/mq9-efm-first`)
+
+* **Symptom:** the ruddervators and the ventral rudder stay still in flight, under the Su-25T shell and under the BNS EFM.
+* **Cause:** `Mq-9_Reaper.EDM` keys its tail on arguments 354 (right ruddervator), 355 (left ruddervator) and 357
+  (ventral rudder). It has no nodes on the DCS standard 15/16/17, which is what the shell and the first EFM drove.
+  Found by listing the EDM's arguments with the `dcs_edm_importer` parser.
+* **Fix:** `efm/src/BNS_MQ9_EFM.cpp` `ed_fm_set_draw_args` also writes 354/355/357 with V-tail mixing (pitch together,
+  yaw split, ventral rudder on yaw); rig check [10] covers it. Sign of each surface against trailing-edge-up is
+  ESTIMATED (`RV_SIGN`, `VR_SIGN`); confirm in DCS. With the EFM off (default), the shell still drives only 15/16/17.

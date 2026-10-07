@@ -299,12 +299,22 @@ EXP void ed_fm_repair() { st.wing_l = st.wing_r = st.ail_l = st.ail_r = st.tail 
 EXP bool ed_fm_need_to_be_repaired() { return st.damaged; }
 
 // ---- draw args (DCS standard set, as the shell flight model drove them): flaps 9/10, ailerons 11/12,
-//      ruddervators 15/16 (pitch) and 17 (yaw), propeller 407
+//      ruddervators 15/16 (pitch) and 17 (yaw), propeller 407; plus the MQ-9 model's own tail args 354/355/357
 EXP void ed_fm_set_draw_args(EdDrawArgument* a, size_t size) {
     auto set = [&](int i, double v) { if (i >= 0 && (size_t)i < size) a[i].f = (float)v; };
     set(9, st.flap); set(10, st.flap);
     set(11, st.da); set(12, -st.da);
-    set(15, st.de); set(16, st.de); set(17, st.dr);
+    set(15, st.de); set(16, st.de); set(17, st.dr);          // DCS standard set, kept for other shapes
+    // Mq-9_Reaper.EDM has no 15/16/17 nodes: its tail is keyed on 354 (right ruddervator, Dummy001/003), 355 (left,
+    // Dummy005/006) and 357 (ventral rudder, Dummy018), each +/-15 deg about its hinge (read from the EDM on
+    // 2026-10-07 with the dcs_edm_importer parser). V-tail mixing: pitch moves both ruddervators together; right
+    // pedal puts the right trailing edge down and the left up, and moves the ventral rudder. The key sign of each
+    // node against "trailing edge up" is not readable without the node's world frame: RV_SIGN / VR_SIGN are
+    // ESTIMATED, flip them if the surfaces move the wrong way in DCS (test card: stick aft, right pedal).
+    constexpr double RV_SIGN = 1.0, VR_SIGN = 1.0;
+    set(354, RV_SIGN * clampd(st.de - st.dr, -1, 1));
+    set(355, RV_SIGN * clampd(st.de + st.dr, -1, 1));
+    set(357, VR_SIGN * st.dr);
     set(407, st.eng.phase);
 }
 

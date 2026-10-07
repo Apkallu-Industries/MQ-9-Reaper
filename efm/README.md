@@ -22,8 +22,13 @@ Derived from the BNS B-2 EFM (Apkallu-Industries/B-2-Spirit, `efm/`).
   (45 deg/s) with bank hold, yaw damper with sideslip suppression; direct law on the ground below 30 m/s.
 - Damage by the DCS cell numbers of the names `MQ-9.lua` uses: ROTOR 63 (engine/propeller), wings 35/29/23 and
   36/30/24, ailerons 25/26, V-tail 49-54.
-- Draw args (DCS standard, as the shell drove them): flaps 9/10, ailerons 11/12, ruddervators 15/16 and 17,
-  propeller 407. Not checked against the `Mq-9_Reaper.EDM` argument list.
+- Draw args: flaps 9/10, ailerons 11/12, propeller 407, plus the model's own tail arguments 354 (right
+  ruddervator), 355 (left) and 357 (ventral rudder) with V-tail mixing; 15/16/17 are still written for other shapes.
+  Checked against `Mq-9_Reaper.EDM` on 2026-10-07 (fourth run) with the `dcs_edm_importer` parser: the model animates
+  0-6, 9-12, 101-104, 280, 306-311, 354, 355, 357, 407, 413, 449, 450 and has **no 15/16/17**, so before this fix the
+  tail never moved under the EFM (or under the Su-25T shell, which drives 15/16/17). Each tail node is keyed
+  +/-15 deg about its hinge; whether +1 is trailing edge up is ESTIMATED (`RV_SIGN` / `VR_SIGN` in the EFM): check in
+  DCS with stick aft and right pedal, flip the constant if a surface moves the wrong way.
 
 ## Rig results (2026-10-07, third scheduled run: drag and part-power fuel flow tuned)
 
@@ -50,6 +55,9 @@ shaft power, ESTIMATED) instead of a constant BSFC, which had given 40 h at the 
 
 Re-run on the scheduled run of 2026-10-07 (05:10 local): `build.bat` BUILD_OK against `D:\Eagle Dynamics\DCS World\API`,
 rig `SIM_TEST_PASS - 0 failed`. Branch pushed and PR opened for the owner (it had only been committed locally).
+
+Fourth scheduled run (2026-10-07, about 13:00-13:30 local): tail draw args moved onto the model's 354/355/357, new rig
+check [10] (V-tail mixing on the draw args); `build.bat` BUILD_OK, rig `SIM_TEST_PASS - 0 failed` (10 checks).
 
 ## Not done / to check
 

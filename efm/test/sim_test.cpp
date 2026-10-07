@@ -254,6 +254,30 @@ int main(int argc, char** argv) {
           fmt("h %.0f m, V %.0f kt, throttle %.2f, AoA %.1f deg", s.pos.y, s.V_() / KT, g_thr, s.aoa() * D));
     check(endur > 22 && endur < 40, "loiter endurance 22..40 h on 1,814 kg (published: 27 h)", fmt("%.0f kg/h, %.1f h", ffl, endur));
 
+    // [10] draw args on the MQ-9 model's own tail arguments (Mq-9_Reaper.EDM keys 354 right / 355 left ruddervator,
+    // 357 ventral rudder; it has no 15/16/17). Checks the V-tail mixing, not the visual sign (ESTIMATED, see EFM).
+    std::printf("[10] draw args: Mq-9_Reaper.EDM tail (354/355 ruddervators, 357 ventral rudder)\n");
+    typedef void (*F_DRAW)(EdDrawArgument*, size_t);
+    F_DRAW draw = (F_DRAW)GetProcAddress(d.h, "ed_fm_set_draw_args");
+    check(draw != nullptr, "ed_fm_set_draw_args exported", "");
+    if (draw) {
+        static EdDrawArgument a[512];
+        s.set_mass(4000);
+        start(d, s, 4000, 160 * KT, 0.6, 30, 160 * KT);
+        run(s, 0.5, [&](double) { d.cmd(2001, 0.6f); d.cmd(2002, 0); d.cmd(2003, 0); });
+        for (auto& x : a) x.f = 0; draw(a, 512);
+        double p354 = a[354].f, p355 = a[355].f;
+        check(std::fabs(p354) > 0.05 && std::fabs(p354 - p355) < 0.05 * std::fabs(p354) + 0.02,
+              "stick: both ruddervators move together", fmt("354 %+.2f, 355 %+.2f, 15 %+.2f", p354, p355, a[15].f));
+        start(d, s, 4000, 160 * KT, 0.6, 30, 160 * KT);
+        run(s, 0.3, [&](double) { d.cmd(2001, (float)g_stick); d.cmd(2002, 0); d.cmd(2003, 1.0f); });
+        for (auto& x : a) x.f = 0; draw(a, 512);
+        check(a[355].f - a[354].f > 0.2 && a[357].f > 0.2 && std::fabs(a[357].f - a[17].f) < 1e-4,
+              "right pedal: ruddervators split (right minus), ventral rudder follows arg 17",
+              fmt("354 %+.2f, 355 %+.2f, 357 %+.2f", a[354].f, a[355].f, a[357].f));
+        d.cmd(2003, 0);
+    }
+
     std::printf("\n%s - %d failed\n", g_fail ? "SIM_TEST_FAIL" : "SIM_TEST_PASS", g_fail);
     return g_fail ? 1 : 0;
 }
