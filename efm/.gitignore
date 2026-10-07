@@ -1,0 +1,9 @@
+obj/
+bin/
+test/*.exe
+test/*.obj
+test/*.log
+*.lib
+*.exp
+*.lib
+*.exp
