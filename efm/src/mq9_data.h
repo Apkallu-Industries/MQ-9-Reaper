@@ -61,7 +61,7 @@ const double PROP_RPM = 2000.0;       // [EST] for the rpm gauges
 
 // mass
 const double M_EMPTY = 2223.0;
-const double FUEL_MAX = 1814.0;       // fact sheet; MQ-9.lua M_fuel_max says 1300
+const double FUEL_MAX = 1814.0;       // fact sheet; MQ-9.lua M_fuel_max matches since 2026-10-07 (was 1300)
 
 // flight control computer [EST]
 const double Q_CMD_MAX = 12.0 * D2R;

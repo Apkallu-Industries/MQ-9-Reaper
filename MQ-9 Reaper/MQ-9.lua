@@ -31,7 +31,7 @@ Reaper =  {
 	M_empty 					= 2223 , -- kg
 	M_nominal 					= 4273, -- kg
 	M_max 						= 4760, -- kg
-	M_fuel_max 					= 1300, -- kg --2225
+	M_fuel_max 					= 1814, -- kg: 4,000 lb internal fuel (USAF MQ-9 Reaper fact sheet); was 1300
 	H_max 					 	= 15000, -- m
 	average_fuel_consumption 	= 0.302, -- this is highly relative, but good estimates are 36-40l/min = 28-31kg/min = 0.47-0.52kg/s -- 45l/min = 35kg/min = 0.583kg/s
 	CAS_min 					= 100/3.6, -- if this is not OVERAL FLIGHT TIME, but jus LOITER TIME, than it sholud be 10-15 minutes.....CAS capability in minute (for AI)

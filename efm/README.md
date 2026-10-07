@@ -47,6 +47,8 @@ rig `SIM_TEST_PASS - 0 failed`. Branch pushed and PR opened for the owner (it ha
 - Never flown in DCS; the Su-25T shell (`old = 54`) stays in use until `BNS_MQ9_USE_EFM = true`.
 - Top speed and endurance pull against each other with one drag figure: 260 KTAS is above the quoted 240 and the
   cruise fuel flow gives 15 h, short of the 20+ h endurance usually quoted. Needs a better drag polar.
-- `MQ-9.lua` `M_fuel_max` is 1,300 kg; the fact sheet says 4,000 lb (1,814 kg).
+- Fixed 2026-10-07: `MQ-9.lua` `M_fuel_max` was 1,300 kg; now 1,814 kg (4,000 lb, USAF fact sheet), the EFM's
+  `FUEL_MAX`. Applied to both ADAP copies too (`AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper` and
+  `AutonomousDronePack\DCS Content\MQ-9 Reaper`). Missions that set fuel explicitly keep their own figure.
 - The ADAP copy (`C:\Dev\AutonomousDronePack\MQ-9 Reaper`) is newer than this repo (GCS menu, STATUS.md, combat
   patrol mission) and does not have the EFM: sync both ways when the pipeline is consolidated.
