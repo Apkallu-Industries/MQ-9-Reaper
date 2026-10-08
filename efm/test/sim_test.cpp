@@ -278,6 +278,56 @@ int main(int argc, char** argv) {
         d.cmd(2003, 0);
     }
 
+    // [11] autopilot: the input profile binds A = 62 (autopilot) and H = 59 (barometric altitude hold); the Su-25T
+    //      shell flew them, the EFM must now (408 / 538 off, 61 level flight).
+    std::printf("[11] autopilot: H (59) after a zoom, A (62) attitude hold, 61 level flight, 408 off, stick override\n");
+    {
+        auto speed_only = [&](double vh, double& ti) {
+            double ev = vh - s.V_(); ti += ev * 0.01;
+            throttle(d, std::fmax(0, std::fmin(1, 0.5 + 0.08 * ev + 0.01 * ti)));
+            d.cmd(2001, 0); d.cmd(2002, 0); d.cmd(2003, 0);
+        };
+        auto bank_to = [&](double deg) {
+            run(s, 30, [&](double) {                                  // level turn: zero vertical speed on the stick
+                d.cmd(2001, (float)clamp1(-4.0 * s.vs() / std::fmax(s.V_(), 50.0)));
+                d.cmd(2002, (float)clamp1(1.5 * (deg / D - s.roll()) - 0.8 * s.w.x)); });
+            d.cmd(2002, 0);
+        };
+        s.set_mass(4000);
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        run(s, 4, [&](double) { d.cmd(2001, 0.4f); d.cmd(2002, 0); });
+        double ti = 0, vs0 = s.vs(); d.cmd(59, 0); double h0 = s.pos.y;
+        Rec rr = run(s, 90, [&](double) { speed_only(160 * KT, ti); });
+        check(!rr.nan && std::fabs(s.pos.y - h0) < 30 && std::fabs(s.vs()) < 1.0 && rr.maxroll < 5, "H: holds the altitude it was engaged at",
+              fmt("engaged climbing %.1f m/s; after 90 s dh %+.0f m, vs %+.2f m/s", vs0, s.pos.y - h0, s.vs()));
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        run(s, 4, [&](double) { d.cmd(2001, 0.4f); d.cmd(2002, 0); });
+        ti = 0; h0 = s.pos.y; run(s, 90, [&](double) { speed_only(160 * KT, ti); });
+        check(s.pos.y - h0 > 100, "without it the same zoom climbs away", fmt("dh %+.0f m", s.pos.y - h0));
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        bank_to(20); double bk = s.roll(); d.cmd(62, 0); double th = s.pitch();
+        rr = run(s, 30, [&](double) { speed_only(160 * KT, ti); });
+        check(!rr.nan && std::fabs(s.roll() - bk) * D < 3 && std::fabs(s.pitch() - th) * D < 1.0, "A: pitch and bank held",
+              fmt("bank %+.1f (engaged %+.1f), pitch %+.1f (engaged %+.1f)", s.roll() * D, bk * D, s.pitch() * D, th * D));
+        d.cmd(408, 0);
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        bank_to(20); bk = s.roll(); d.cmd(61, 0); h0 = s.pos.y; ti = 0;
+        run(s, 60, [&](double) { speed_only(160 * KT, ti); });
+        check(std::fabs(s.roll()) * D < 2 && std::fabs(s.pos.y - h0) < 30, "61: wings level, altitude kept",
+              fmt("bank %+.1f (was %+.1f), dh %+.0f m", s.roll() * D, bk * D, s.pos.y - h0));
+        d.cmd(538, 0);
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        d.cmd(59, 0); d.cmd(408, 0);
+        run(s, 4, [&](double) { d.cmd(2001, 0.4f); d.cmd(2002, 0); });
+        ti = 0; h0 = s.pos.y; run(s, 60, [&](double) { speed_only(160 * KT, ti); });
+        check(s.pos.y - h0 > 50, "408 off: the stick flies it again", fmt("dh %+.0f m", s.pos.y - h0));
+        start(d, s, 4000, 160 * KT, 0.6, 60, 160 * KT);
+        d.cmd(59, 0); h0 = s.pos.y;
+        run(s, 3, [&](double) { d.cmd(2001, 1.0f); d.cmd(2002, 0); });
+        ti = 0; run(s, 60, [&](double) { speed_only(160 * KT, ti); });
+        check(s.pos.y - h0 > 50, "full stick overrides H", fmt("dh %+.0f m from the captured altitude", s.pos.y - h0));
+    }
+
     std::printf("\n%s - %d failed\n", g_fail ? "SIM_TEST_FAIL" : "SIM_TEST_PASS", g_fail);
     return g_fail ? 1 : 0;
 }

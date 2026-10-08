@@ -48,6 +48,18 @@ sheet's 4,000 lb).
 | Engine failure glide | L/D 15.8 at 90 KTAS |
 | Propeller hit / left outer wing lost | engine stops / FCC holds the wings within 2.5 deg |
 | Loiter, 20,000 ft, 110 KTAS, 3,300 kg (new check [9]) | 67 kg/h = 27.0 h on 1,814 kg (target 27 h) |
+| Autopilot (check [11], 2026-10-08): H engaged in a 19.4 m/s zoom | back on the engage altitude, dh 0 m, vs -0.01 m/s after 90 s; without it the zoom climbs 1,068 m |
+| A (62) in a 20 deg level turn / 61 level flight out of it | bank +19.4 / pitch +1.6 held (engaged +19.3 / +1.5); wings level, dh 0 m |
+| 408 off / full-stick override | both hand it back to the stick (759 m / 797 m away) |
+
+Autopilot (added 2026-10-08): the input profile binds A = 62 (autopilot) and H = 59 (barometric altitude hold),
+which the Su-25T shell flew and the first EFM ignored. The EFM now flies the FC3 autopilot commands through the FCC:
+62 / 386 attitude hold (pitch and bank captured), 59 / 389 / 387 altitude hold (altitude and bank captured; flight path
+at most 3 deg, 10 s altitude time constant), 61 / 388 level flight (altitude captured, wings levelled), 408 / 538 off.
+Bank inside 5 deg is captured as wings level, beyond it as held, at most 30 deg; the pitch command carries the turn's
+body pitch rate. A stick past 0.5, weight on wheels, or gear down below 100 m AGL disengages; each change is logged.
+Radio-altitude hold (60 / 390) is not modelled. Control laws **ESTIMATED** (the MQ-9's own autopilot modes, e.g.
+heading / airspeed / orbit holds from the GCS, are not modelled). Same laws as the B-2 EFM (PR #25 there).
 
 Changes: `CD0` 0.030 -> 0.038 (260 -> 239 KTAS); fuel flow on a Willans line (`FF_ZERO` 0.12 of rated flow at zero
 shaft power, ESTIMATED) instead of a constant BSFC, which had given 40 h at the loiter point. Check [2] tightened to

@@ -42,6 +42,9 @@ struct State {
     double gear = 1, gear_cmd = 1, flap = 0, flap_cmd = 0;
     double fuel = 1000, burnt = 0; bool unlimited = false;
     double de = 0, da = 0, dr = 0, iq = 0, ip = 0;
+    // autopilot (FC3 commands from the input profile: A = 62, H = 59, ...) [EST control laws]
+    int ap = 0; double ap_h = 0, ap_pitch = 0, ap_roll = 0;
+    double vs = 0, alt_prev = -1e9;            // vertical speed from the altitude DCS reports, filtered
     double V = 0, M = 0, alpha = 0, beta = 0, qbar = 0, nz = 1, CL = 0, CD = 0;
     V3 F, Mo;
     double wing_l = 1, wing_r = 1, ail_l = 1, ail_r = 1, tail = 1; bool damaged = false, immortal = false;
@@ -97,6 +100,28 @@ double g_comp[3] = {0, 0, 0};
 bool on_ground() { return g_comp[0] > 0.005 || g_comp[1] > 0.005 || g_comp[2] > 0.005; }
 double g_roll_hold = 0; bool g_roll_holding = false;
 
+// ---- autopilot. The Su-25T shell flew the FC3 autopilot commands this aircraft's input profile binds (A =
+//      62 autopilot, H = 59 barometric altitude hold, Xbox Start = 62 / 59); the first EFM ignored them. Modes
+//      (command_defs.lua numbers): 62 / 386 attitude hold (pitch and bank captured); 59 / 389 / 387 altitude hold
+//      (altitude and bank captured); 61 / 388 level flight (altitude captured, wings levelled); 408 / 538 off.
+//      A stick past AP_OVERRIDE, weight on wheels, or gear down below 100 m AGL disengages. Radio-altitude hold
+//      (60 / 390) is not modelled. Laws ESTIMATED; same as the B-2 EFM (efm/b2-efm-first).
+enum { AP_OFF = 0, AP_ATT = 1, AP_ALT = 2, AP_LVL = 3 };
+const double AP_OVERRIDE = 0.5, AP_BANK_MAX = 30 * D2R;
+const char* ap_name(int m) {
+    return m == AP_ATT ? "ATTITUDE HOLD" : m == AP_ALT ? "ALTITUDE HOLD" : m == AP_LVL ? "LEVEL FLIGHT" : "OFF";
+}
+void ap_set(int mode, const char* why) {
+    if (mode != AP_OFF) {
+        st.ap_h = st.alt; st.ap_pitch = st.pitch;
+        st.ap_roll = (mode == AP_LVL || std::fabs(st.roll) < 5 * D2R) ? 0.0 : clampd(st.roll, -AP_BANK_MAX, AP_BANK_MAX);
+    }
+    if (mode != st.ap)
+        logf("autopilot %s (%s) h %.0f m pitch %.1f bank %.1f", ap_name(mode), why, st.alt, st.pitch / D2R, st.ap_roll / D2R);
+    st.ap = mode;
+}
+void ap_toggle(int mode) { ap_set(st.ap == mode ? AP_OFF : mode, "command"); }
+
 void sim(double dt) {
     V3 va = v3(st.v_body.x - st.wind_body.x, st.v_body.y - st.wind_body.y, st.v_body.z - st.wind_body.z);
     st.V = std::sqrt(va.x * va.x + va.y * va.y + va.z * va.z);
@@ -112,16 +137,33 @@ void sim(double dt) {
     st.gear = approach(st.gear, st.gear_cmd, 1.0 / 8.0, 1.0 / 8.0, dt);
     st.flap = approach(st.flap, st.flap_cmd, 1.0 / 6.0, 1.0 / 6.0, dt);
     engine(dt);
+    // vertical speed from the altitude DCS reports each frame, 0.5 s filter (the rig feeds the same call)
+    if (st.alt_prev > -1e8) st.vs += (clampd((st.alt - st.alt_prev) / dt, -300, 300) - st.vs) * clampd(dt / 0.5, 0, 1);
+    st.alt_prev = st.alt;
 
     // ---- flight control computer
     double stick_p = st.p_an ? st.pitch_in : st.p_disc;
     double stick_r = st.r_an ? st.roll_in : st.r_disc;
     double pedal = st.y_an ? st.yaw_in : st.y_disc;
     const double tail = st.tail, ail = 0.5 * (st.ail_l + st.ail_r);
+    if (st.ap != AP_OFF) {                                             // autopilot disconnects
+        if (std::fabs(stick_p) > AP_OVERRIDE || std::fabs(stick_r) > AP_OVERRIDE) ap_set(AP_OFF, "stick override");
+        else if (on_ground()) ap_set(AP_OFF, "weight on wheels");
+        else if (st.gear > 0.5 && st.h_agl < 100.0) ap_set(AP_OFF, "gear down below 100 m");
+    }
     if (on_ground() && st.V < 30.0) {                                  // ground: direct law
         st.de = clampd(stick_p, -1, 1); st.da = clampd(stick_r, -1, 1); st.iq = st.ip = 0; g_roll_holding = false;
     } else if (q > 20) {
         double q_cmd = stick_p * Q_CMD_MAX;
+        if (st.ap == AP_ATT) q_cmd = clampd(0.5 * (st.ap_pitch - st.pitch), -0.05, 0.05);
+        else if (st.ap == AP_ALT || st.ap == AP_LVL) {
+            // outer loop: flight path for a 10 s altitude time constant, at most 3 deg; inner: flight-path rate
+            double gamma = std::asin(clampd(st.vs / V, -1, 1));
+            double g_cmd = clampd(0.1 * (st.ap_h - st.alt) / V, -0.05, 0.05);
+            q_cmd = clampd(0.8 * (g_cmd - gamma), -0.05, 0.05);
+        }
+        if (st.ap != AP_OFF)                     // turn compensation: the body pitch rate a level banked turn needs
+            q_cmd += 9.80665 / V * std::sin(st.roll) * std::tan(clampd(st.roll, -AP_BANK_MAX, AP_BANK_MAX));
         q_cmd = std::fmin(q_cmd, 4.0 * (ALPHA_LIMIT - st.alpha));      // alpha limiter
         if (st.nz > NZ_MAX) q_cmd = std::fmin(q_cmd, -0.3 * (st.nz - NZ_MAX));
         double kz = q * S * CBAR / st.Iz, be = kz * CM_DE * std::fmax(tail, 0.1);
@@ -134,6 +176,7 @@ void sim(double dt) {
             if (!g_roll_holding) { g_roll_holding = true; g_roll_hold = std::fabs(st.roll) < 5 * D2R ? 0.0 : st.roll; }
             p_cmd = clampd(-0.8 * (st.roll - g_roll_hold), -0.15, 0.15);
         } else g_roll_holding = false;
+        if (st.ap != AP_OFF) { p_cmd = clampd(-0.8 * (st.roll - st.ap_roll), -0.15, 0.15); g_roll_holding = false; }
         double kx = q * S * B / st.Ix, ba = kx * CL_DA * std::fmax(ail, 0.1);
         double ep = p_cmd - p;
         double da = (4.0 * ep + st.ip - kx * ((CLB0 + CLB_CL * st.CL) * st.beta + CLP * phat)) / ba;
@@ -250,6 +293,10 @@ EXP void ed_fm_set_command(int command, float value) {
     case 963: st.wb_r = 1.0; break;       case 964: st.wb_r = 0.0; break;
     case 2111: st.wb_l = clampd(0.5 * (1.0 + value), 0, 1); break;
     case 2112: st.wb_r = clampd(0.5 * (1.0 + value), 0, 1); break;
+    case 62: case 386: ap_toggle(AP_ATT); break;                     // autopilot (A): attitude hold
+    case 59: case 389: case 387: ap_toggle(AP_ALT); break;           // barometric altitude hold (H)
+    case 61: case 388: ap_toggle(AP_LVL); break;                     // level flight
+    case 408: case 538: ap_set(AP_OFF, "disengage command"); break;  // autopilot off
     default: break;
     }
 }
@@ -376,6 +423,7 @@ EXP double ed_fm_get_param(unsigned i) {
 static void common_start(double gear, bool running, double thr) {
     st.gear = st.gear_cmd = gear; st.flap = st.flap_cmd = 0;
     st.iq = st.ip = 0; st.de = st.da = st.dr = 0; g_roll_holding = false;
+    st.ap = AP_OFF; st.vs = 0; st.alt_prev = -1e9;
     Engine& e = st.eng; e.starting = false; e.on = running; e.thr = thr;
     e.p = running ? IDLE_POWER + (1 - IDLE_POWER) * thr : 0; e.rpm = running ? PROP_RPM : 0;
 }
