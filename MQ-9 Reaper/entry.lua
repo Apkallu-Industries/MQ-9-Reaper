@@ -3,7 +3,7 @@ declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
 shortName       = "MQ-9_Reaper_Flyable",
-developerName   = "Blacknet Systems",
+developerName   = "Eagle Dynamics / Yutani Industries",
 
 image     	    = "FC3.bmp",
 installed 	    = true,
