@@ -33,6 +33,7 @@ There are **two on-disk copies** of the mod — keep both in sync:
 | **Shkval thermal probe** | — | Yutani | Hot vehicle + IR channel: real heat or legacy low-light? Decides sensor path. |
 | **Push entry.lua fix to GitHub** | — | Yutani/Wayland | Reorder fix is local only; push from ONE canonical repo. |
 | **Consolidate two-repo pipeline** | — | Wayland | Make Dev canonical; deploy to Saved Games by copy, not a 2nd pushing repo. |
+| **BNS EFM switch-on** (`BNS_MQ9_USE_EFM`, branch `efm/mq9-efm-first`, PR #2) | — | Owner | 2026-10-08: the EFM now flies the A (62) / H (59) autopilot keys the shell used to; rig `SIM_TEST_PASS` (11 checks). Still off by default; needs a DCS flight with it on. The ADAP copy has no EFM yet. |
 
 ---
 
