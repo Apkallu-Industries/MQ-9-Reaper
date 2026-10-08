@@ -1,12 +1,13 @@
 local self_ID = "MQ-9 Reaper Flyable"
 -- BNS external flight model (bin\BNS_MQ9_EFM.dll, source efm\ at the repository root, data FM\MQ9_FM.lua).
--- OFF until the owner has flown it: switched on, it replaces the inherited Su-25T shell (old = 54) flight model.
-local BNS_MQ9_USE_EFM = false
+-- ON from 2026-10-08 for the owner's first flight (Root: every aircraft gets its EFM); false goes back to the
+-- flight model of the inherited Su-25T shell (old = 54).
+local BNS_MQ9_USE_EFM = true
 declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
 shortName       = "MQ-9_Reaper_Flyable",
-developerName   = "Eagle Dynamics / Yutani Industries",
+developerName   = "Blacknet Systems",
 
 image     	    = "FC3.bmp",
 installed 	    = true,

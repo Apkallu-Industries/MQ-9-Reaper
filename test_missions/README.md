@@ -21,7 +21,7 @@ ADAP copies (outside Git), fixed 2026-10-07 in the sixth scheduled run, original
 - `miz_check` on both: `MIZ_CHECK_PASS`.
 - Not done (the PC's permission check refused the edit; owner to apply): `developerName` in the ADAP `entry.lua`
   files still reads `"Blacknet Systems"` (canonical) and `"Eagle Dynamics / Apkallu Industries"` (DCS Content); both
-  should be `"Eagle Dynamics / Yutani Industries"` as in this repo.
+  should be `"Blacknet Systems"` as in this repo (owner rule 2026-10-08; set by Claude the same day).
 
 ## `MQ9_CLAUDE_TEST_AI_Flight.miz` (AI smoke test)
 

@@ -20,7 +20,7 @@ There are **two on-disk copies** of the mod — keep both in sync:
 | **ROADMAP** — North Star GCS container section | Paid flagship on record | ✅ | ⬜ verify | ✅ |
 | **Acceptance test card** (`Documents/`) | Flight-test plan | ✅ | ⬜ verify | ✅ |
 | **ADAP sync (2026-10-08 run, branch `fix/mq9-adap-sync-2026-10-08`)**: repo brought level with the ADAP canonical copy: internal fuel `M_fuel_max` 1300 -> 1814 kg (4,000 lb, USAF MQ-9A fact sheet); GCS menu Frontline telemetry (`[FRONTLINE_EVENT]` type `BNS_MQ9`) in `reaper_gcs_menu.lua` and in the Combat Patrol .miz; repo copy's UTF-8 BOM and mangled em dash in the menu header gone | Repo had drifted behind ADAP (the fuel fix lived only on the EFM branch, telemetry only in ADAP) | n/a | ✅ (source) | PR |
-| **Credit: `developerName` = "Eagle Dynamics / Yutani Industries"** (was "Blacknet Systems" on `main`; ADAP copies had "Blacknet Systems" / "Eagle Dynamics / Apkallu Industries") | Studio credit rule | ⬜ not deployed | ✅ 2026-10-08 | PR |
+| **Credit: `developerName` = "Blacknet Systems"** (owner 2026-10-08: every BNS mod credits BNS; Weyland-Yutani own BNS in the lore only. Reverses the earlier "Eagle Dynamics / Yutani Industries" credit) | Owner rule | ✅ installed | ✅ 2026-10-08 | PR #5 |
 | **B-2: disabled duplicate mod** (`_B-2_Spirit_CONFLICT_BACKUP/entry.lua` → `.disabled`) | Two B-2 plugins → B-2 dropped from ME | ✅ (parent folder) | n/a | n/a |
 
 ---
