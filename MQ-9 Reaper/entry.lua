@@ -1,4 +1,7 @@
 local self_ID = "MQ-9 Reaper Flyable"
+-- BNS external flight model (bin\BNS_MQ9_EFM.dll, source efm\ at the repository root, data FM\MQ9_FM.lua).
+-- OFF until the owner has flown it: switched on, it replaces the inherited Su-25T shell (old = 54) flight model.
+local BNS_MQ9_USE_EFM = false
 declare_plugin(self_ID,
 {
 displayName     = _("MQ-9 Reaper (Flyable)"),
@@ -13,6 +16,7 @@ update_id       = "MQ-9_Reaper_Flyable",
 
 version		    = "0.0.1v",
 state		    = "installed",
+binaries	    = BNS_MQ9_USE_EFM and { "BNS_MQ9_EFM.dll" } or nil,
 info		    = _("General Atomics MQ-9 Reaper Unmanned Aerial Vehicle (Flyable Mod)."),
 
 InputProfiles =
@@ -67,7 +71,14 @@ mount_vfs_liveries_path(current_mod_path ..  "/Liveries")
 local support_cockpit = current_mod_path .. '/Cockpit/Scripts/'
 
 -- Flyable registration on Su-25T CWS shell
-make_flyable('MQ-9_Reaper_Flyable', support_cockpit, {nil, old = 54}, current_mod_path .. '/comm.lua')
+if BNS_MQ9_USE_EFM then
+    dofile(current_mod_path .. "/FM/MQ9_FM.lua")    -- FM table: empty mass properties + undercarriage
+    FM[1] = self_ID
+    FM[2] = "BNS_MQ9_EFM.dll"
+    make_flyable('MQ-9_Reaper_Flyable', support_cockpit, FM, current_mod_path .. '/comm.lua')
+else
+    make_flyable('MQ-9_Reaper_Flyable', support_cockpit, {nil, old = 54}, current_mod_path .. '/comm.lua')
+end
 
 -- Load aircraft descriptor into DCS database
 dofile(current_mod_path .. "/MQ-9.lua")

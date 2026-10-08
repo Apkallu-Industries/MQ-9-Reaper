@@ -35,6 +35,7 @@ There are **two on-disk copies** of the mod — keep both in sync:
 | **Shkval thermal probe** | — | Yutani | Hot vehicle + IR channel: real heat or legacy low-light? Decides sensor path. |
 | **Push entry.lua fix to GitHub** | — | Yutani/Wayland | Reorder fix is local only; push from ONE canonical repo. |
 | **Consolidate two-repo pipeline** | — | Wayland | Make Dev canonical; deploy to Saved Games by copy, not a 2nd pushing repo. |
+| **BNS EFM switch-on** (`BNS_MQ9_USE_EFM`, branch `efm/mq9-efm-first`, PR #2) | — | Owner | 2026-10-08: the EFM now flies the A (62) / H (59) autopilot keys the shell used to; rig `SIM_TEST_PASS` (11 checks). Still off by default; needs a DCS flight with it on. The ADAP copy has no EFM yet. |
 | **F10 GCS menu titles too long** | — | Owner | 2026-10-08 dry-load: 42 of 46 GCS menu titles are over 35 characters and wrap onto two lines in DCS (Frontline registry #20). Not changed: the wording is the owner's; shorten when convenient. |
 
 Checks on 2026-10-08 (branch `fix/mq9-adap-sync-2026-10-08`): `tools/miz_check.py` MIZ_CHECK_PASS (Combat Patrol + CLAUDE_TEST); dcs-frontline `lint_mission_scripts` 0 errors; `dry_load_mission_scripts` on a scratch copy with the T+1 s menu trigger moved to mission start: `reaper_gcs_menu.lua` loads, 46 F10 entries, telemetry line logged, no errors. The stock dry-load does not run the T+1 s trigger (it is not a mission-start trigger), so it reports 0 scripts on the shipped mission; that is expected.
