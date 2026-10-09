@@ -5,7 +5,7 @@ local self_ID = "MQ-9 Reaper Flyable"
 local BNS_MQ9_USE_EFM = true
 declare_plugin(self_ID,
 {
-displayName     = _("MQ-9 Reaper (Flyable)"),
+displayName     = _("BNS MQ-9 Reaper"),
 shortName       = "MQ-9_Reaper_Flyable",
 developerName   = "Blacknet Systems",
 
