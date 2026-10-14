@@ -4,7 +4,7 @@
 Reaper =  {
         
 	Name 				=   'MQ-9_Reaper_Flyable',
-	DisplayName			= _('MQ-9 Reaper (Flyable)'),
+	DisplayName			= _('BNS MQ-9 Reaper'),
 	Picture 			= "MQ-9_Reaper.png",
 	Rate 				=  40, -- RewardPoint in Multiplayer
 	Shape 				= "mq-9_reaper",
