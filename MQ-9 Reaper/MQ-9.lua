@@ -107,15 +107,21 @@ Reaper =  {
 		},
 	}, -- end of crew_members
 
+	-- DCS reads fires_pos by fixed slot (stock A-10A / A-6E): 1 fuselage, 2/3 wing R/L inner, 4/5 wing R/L centre,
+	-- 6/7 wing R/L outer, 8/9 engine R/L, 10/11 a further pair; z > 0 is right. The table was the stock Bf 109 K-4's
+	-- ("TODO evaluate - Made Dragon"): left-wing slot 3 sat on the right, the "outer" slots at the fuselage. Wing slots
+	-- 2-7 now sit on the wet wing at 20 / 50 / 80 % of the half span, on this file's wing_tip_pos line (x -1.1, y 0),
+	-- ESTIMATED. Slots 1 and 8-11 are still the Bf 109's: they need the MQ-9 model's fuselage tank and engine bay
+	-- positions (owner / model data; Frontline registry #30).
 	fires_pos = 
 	{
 		[1] = 	{1,	0.5,0},
-		[2] = 	{0.6 ,-0.25,	0.95},
-		[3] = 	{-0.1,-0.3 ,	0.95},
-		[4] = 	{2,	-0.5,	0.4},
-		[5] = 	{-0.4,	-0.25,	-2},
-		[6] = 	{-1.9,	-0.18,	0.4},
-		[7] = 	{-1.9,	-0.18, -0.4},
+		[2] = 	{-1.1,	0,	2.0},
+		[3] = 	{-1.1,	0,	-2.0},
+		[4] = 	{-1.1,	0,	5.0},
+		[5] = 	{-1.1,	0,	-5.0},
+		[6] = 	{-1.1,	0,	8.0},
+		[7] = 	{-1.1,	0,	-8.0},
 		[8] = 	{1.7,	-0.1,	0.55},
 		[9] = 	{1.7,	-0.1,  -0.55},
 		[10] = 	{-5,	0.5,	0},
