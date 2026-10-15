@@ -174,6 +174,69 @@ local function initReaperGCS()
     end
 
     -- =================================================================================
+    -- DCS-AI-FRONTLINE TELEMETRY
+    -- One [FRONTLINE_EVENT] {"type":"BNS_MQ9", "action":...} line per GCS action, weapon
+    -- release and kill, read by the Frontline bridge (MCP: get_bns_mod_events mod=MQ9).
+    -- net.lua2json is not available in the mission sandbox, hence the small encoder.
+    -- =================================================================================
+    local function jsonEncode(v)
+        local t = type(v)
+        if t == "boolean" then return v and "true" or "false" end
+        if t == "number" then
+            if v ~= v or v == math.huge or v == -math.huge then return "null" end
+            if v == math.floor(v) and math.abs(v) < 1e15 then return string.format("%d", v) end
+            return string.format("%.3f", v)
+        end
+        if t == "string" then
+            return '"' .. v:gsub('[%c"\\]', function(c)
+                local map = { ['"'] = '\\"', ['\\'] = '\\\\', ['\n'] = '\\n', ['\r'] = '\\r', ['\t'] = '\\t' }
+                return map[c] or string.format("\\u%04x", c:byte())
+            end) .. '"'
+        end
+        if t == "table" then
+            local keys, parts = {}, {}
+            for k in pairs(v) do keys[#keys + 1] = tostring(k) end
+            table.sort(keys)
+            for _, k in ipairs(keys) do parts[#parts + 1] = jsonEncode(k) .. ":" .. jsonEncode(v[k]) end
+            return "{" .. table.concat(parts, ",") .. "}"
+        end
+        return "null"
+    end
+
+    local telemetrySeq = 0
+    local function frontline(action, extra, unit)
+        telemetrySeq = telemetrySeq + 1
+        local evt = {
+            type = "BNS_MQ9", time = timer.getTime(), action = action,
+            eventRef = string.format("%s#%d", action, telemetrySeq),
+            laserCode = reaperState.laserCode, laserActive = reaperState.laserActive,
+            flightMode = reaperState.flightMode, selectedWeapon = reaperState.selectedWeapon,
+        }
+        if not unit then
+            local _
+            _, unit = getReaperController()
+        end
+        if unit then
+            pcall(function()
+                evt.initiatorUnitName = unit:getName()
+                evt.initiatorTypeName = unit:getTypeName()
+                local pn = unit:getPlayerName()
+                if pn and pn ~= "" then evt.initiatorPlayerName = pn end
+                local p = unit:getPoint()
+                evt.location = { x = p.x, y = p.z }
+                evt.altitude = math.floor(p.y)
+            end)
+        end
+        for k, v in pairs(extra or {}) do evt[k] = v end
+        pcall(function() env.info("[FRONTLINE_EVENT] " .. jsonEncode(evt)) end)
+    end
+
+    local function pointOf(p)
+        if not p then return nil end
+        return { x = math.floor(p.x), y = math.floor(p.z), elevation = math.floor(p.y or 0) }
+    end
+
+    -- =================================================================================
     -- OVER-ENLARGED TACTICAL DISPLAY BANNER
     -- Formatted with standard ASCII borders (100% compatible with DCS World fonts)
     -- =================================================================================
@@ -251,6 +314,7 @@ local function initReaperGCS()
     -- F1-1: Maintain Heading
     missionCommands.addCommand("F1: Maintain Heading (Compass / Vector Hold)", flightMenu, function()
         reaperState.flightMode = "HEADING HOLD (ACTIVE)"
+        frontline("FLIGHT_MODE", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: MAINTAIN HEADING",
@@ -268,6 +332,7 @@ local function initReaperGCS()
     -- F1-2: Maintain Altitude
     missionCommands.addCommand("F2: Maintain Altitude (Barometric Hold)", flightMenu, function()
         reaperState.flightMode = "ALTITUDE HOLD (ACTIVE)"
+        frontline("FLIGHT_MODE", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: MAINTAIN ALTITUDE",
@@ -287,6 +352,7 @@ local function initReaperGCS()
         reaperState.flightMode = string.format("ORBIT LOITER (%s)", reaperState.orbitDirection)
         local isRight = (reaperState.orbitDirection == "RIGHT")
         applyOrbitTask(isRight)
+        frontline("ORBIT", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: MAINTAIN ORBIT",
@@ -315,6 +381,7 @@ local function initReaperGCS()
         reaperState.waypointName = wpNames[reaperState.waypointIndex]
         reaperState.flightMode = string.format("NAV ROUTE -> WP %d", reaperState.waypointIndex)
         clearFlightTask()
+        frontline("FLIGHT_MODE", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "NAVIGATION & MISSION COMPUTER",
             "NAV ROUTE: FLY TO NEXT WAYPOINT",
@@ -334,6 +401,7 @@ local function initReaperGCS()
         reaperState.orbitDirection = "LEFT"
         reaperState.flightMode = "ORBIT LEFT (COUNTER-CLOCKWISE)"
         applyOrbitTask(false)
+        frontline("ORBIT", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: ORBIT LEFT",
@@ -353,6 +421,7 @@ local function initReaperGCS()
         reaperState.orbitDirection = "RIGHT"
         reaperState.flightMode = "ORBIT RIGHT (CLOCKWISE)"
         applyOrbitTask(true)
+        frontline("ORBIT", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: ORBIT RIGHT",
@@ -371,6 +440,7 @@ local function initReaperGCS()
     missionCommands.addCommand("F7: Disengage Autopilot (Manual Stick & Rudder)", flightMenu, function()
         reaperState.flightMode = "MANUAL FLIGHT (PILOT CONTROL)"
         clearFlightTask()
+        frontline("FLIGHT_MODE", { mode = reaperState.flightMode })
         showOverEnlargedBanner(
             "FLIGHT CONTROL & AUTOPILOT",
             "AUTOPILOT: DISENGAGED",
@@ -496,6 +566,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F1: Select AGM-114K Hellfire (Pylons 1 & 4)", selectWeaponMenu, function()
         reaperState.selectedWeapon = "AGM-114K Hellfire (SAL-2)"
+        frontline("WEAPON_SELECTED")
         showOverEnlargedBanner(
             "WEAPONS MANAGEMENT SYSTEM",
             "ORDNANCE SELECTED: AGM-114K HELLFIRE",
@@ -513,6 +584,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F2: Select GBU-12 Paveway II (Pylons 2 & 3)", selectWeaponMenu, function()
         reaperState.selectedWeapon = "GBU-12 Paveway II (500lb LGB)"
+        frontline("WEAPON_SELECTED")
         showOverEnlargedBanner(
             "WEAPONS MANAGEMENT SYSTEM",
             "ORDNANCE SELECTED: GBU-12 PAVEWAY II",
@@ -534,6 +606,7 @@ local function initReaperGCS()
         else
             reaperState.selectedWeapon = "AGM-114K Hellfire (SAL-2)"
         end
+        frontline("WEAPON_SELECTED")
         showOverEnlargedBanner(
             "WEAPONS MANAGEMENT SYSTEM",
             "WEAPON CYCLED",
@@ -578,6 +651,7 @@ local function initReaperGCS()
         reaperState.warheadArmed = true
         reaperState.seekerArmed = true
         for i = 1, 4 do reaperState.stations[i].status = "ARMED (LIVE)" end
+        frontline("WEAPONS_ARMED")
         showOverEnlargedBanner(
             "WEAPONS ARMING & FUZING SYSTEM",
             "WARHEAD & SEEKER ARMED",
@@ -598,6 +672,7 @@ local function initReaperGCS()
         reaperState.warheadArmed = false
         reaperState.seekerArmed = false
         for i = 1, 4 do reaperState.stations[i].status = "SAFE (STANDBY)" end
+        frontline("WEAPONS_SAFE")
         showOverEnlargedBanner(
             "WEAPONS ARMING & FUZING SYSTEM",
             "WARHEAD & SEEKER SAFED",
@@ -622,6 +697,7 @@ local function initReaperGCS()
             reaperState.stations[i].count = 0
             reaperState.stations[i].status = "JETTISONED"
         end
+        frontline("JETTISON")
         showOverEnlargedBanner(
             "EMERGENCY STORES MANAGEMENT",
             "EMERGENCY STORES JETTISON",
@@ -646,6 +722,7 @@ local function initReaperGCS()
     -- F3-1: Open Gimbal Camera
     missionCommands.addCommand("F1: Open MTS-B Gimbal Camera (Activate Optical Sensor)", laserMenu, function()
         reaperState.gimbalCamera = true
+        frontline("CAMERA_ON")
         showOverEnlargedBanner(
             "MTS-B TARGETING SENSOR",
             "MTS-B GIMBAL CAMERA: DEPLOYED & ACTIVE",
@@ -667,6 +744,7 @@ local function initReaperGCS()
     -- F3-2: Stow / Close Gimbal Camera
     missionCommands.addCommand("F2: Stow / Close MTS-B Gimbal Camera", laserMenu, function()
         reaperState.gimbalCamera = false
+        frontline("CAMERA_OFF")
         showOverEnlargedBanner(
             "MTS-B TARGETING SENSOR",
             "MTS-B GIMBAL CAMERA: STOWED",
@@ -683,6 +761,7 @@ local function initReaperGCS()
     -- F3-3: Laser ON
     missionCommands.addCommand("F3: Laser Designator - [ EMIT LASER ON ]", laserMenu, function()
         reaperState.laserActive = true
+        frontline("LASER_ON")
         showOverEnlargedBanner(
             "MTS-B TARGETING SENSOR",
             "MTS-B TARGETING LASER: DESIGNATING",
@@ -702,6 +781,7 @@ local function initReaperGCS()
     -- F3-4: Laser OFF
     missionCommands.addCommand("F4: Laser Designator - [ CEASE LASER OFF ]", laserMenu, function()
         reaperState.laserActive = false
+        frontline("LASER_OFF")
         showOverEnlargedBanner(
             "MTS-B TARGETING SENSOR",
             "MTS-B TARGETING LASER: CEASE LASING",
@@ -729,6 +809,7 @@ local function initReaperGCS()
                     trigger.action.smoke(targetPt, trigger.smokeColor.Red)
                 end
             end
+            frontline("TARGET_MARKED", { target = pointOf(targetPt) })
             showOverEnlargedBanner(
                 "MTS-B TARGETING SENSOR",
                 "TARGET GROUND SPOT MARKED",
@@ -750,6 +831,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F1: Set Code 1688 (Standard NATO CAS / JTAC Primary)", codeMenu, function()
         reaperState.laserCode = 1688
+        frontline("LASER_CODE")
         showOverEnlargedBanner(
             "MTS-B LASER CONFIGURATION",
             "LASER PRF CODE CHANGED",
@@ -765,6 +847,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F2: Set Code 1681 (ADAP Ghost Sniper UGV Sync)", codeMenu, function()
         reaperState.laserCode = 1681
+        frontline("LASER_CODE")
         showOverEnlargedBanner(
             "MTS-B LASER CONFIGURATION",
             "LASER PRF CODE CHANGED",
@@ -780,6 +863,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F3: Set Code 1685 (ADAP Tactical Recon Drone Sync)", codeMenu, function()
         reaperState.laserCode = 1685
+        frontline("LASER_CODE")
         showOverEnlargedBanner(
             "MTS-B LASER CONFIGURATION",
             "LASER PRF CODE CHANGED",
@@ -794,6 +878,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F4: Set Code 1111 (CAS Priority Alpha)", codeMenu, function()
         reaperState.laserCode = 1111
+        frontline("LASER_CODE")
         showOverEnlargedBanner(
             "MTS-B LASER CONFIGURATION",
             "LASER PRF CODE CHANGED",
@@ -808,6 +893,7 @@ local function initReaperGCS()
 
     missionCommands.addCommand("F5: Set Code 1511 (SOF / JTAC Tactical Infill)", codeMenu, function()
         reaperState.laserCode = 1511
+        frontline("LASER_CODE")
         showOverEnlargedBanner(
             "MTS-B LASER CONFIGURATION",
             "LASER PRF CODE CHANGED",
@@ -845,6 +931,7 @@ local function initReaperGCS()
             trigger.action.markToAll(datalinkMarkId, string.format("MQ-9 SPI: TARGET DESIGNATION (LSR %d)", reaperState.laserCode), targetPt, false)
         end
 
+        frontline("SPI_BROADCAST", { target = pointOf(targetPt) })
         showOverEnlargedBanner(
             "TACTICAL DATALINK MANAGEMENT (LINK-16)",
             "DATALINK: TARGET BROADCAST TRANSMITTED",
@@ -861,6 +948,7 @@ local function initReaperGCS()
     end)
 
     missionCommands.addCommand("F2: Target Hand-Off to ADAP Ghost Sniper UGV", datalinkMenu, function()
+        frontline("HANDOFF", { to = "ASD-1 Ghost Sniper UGV", laserCode = 1681 })
         showOverEnlargedBanner(
             "AUTONOMOUS DRONE ASSET PACK (ADAP)",
             "DATALINK: UGV GROUND HAND-OFF",
@@ -950,7 +1038,7 @@ local function initReaperGCS()
     local liveCombatHudActive = false
     local function combatHudLoop()
         if not liveCombatHudActive then return end
-        local u = getPlayerReaper()
+        local _, u = getReaperController()  -- was getPlayerReaper(), which never existed
         local altM = 2420
         local spdKts = 130
         local hdg = 0
@@ -985,7 +1073,14 @@ local function initReaperGCS()
             reaperState.irPointer and "ACTIVE" or "OFF",
             reaperState.selectedWeapon
         )
-        trigger.action.outTextForGroup(playerGroupId or 1, hudMsg, 3, true)
+        -- To the drone's own group (playerGroupId was never defined, so this went to group 1).
+        local gid = nil
+        if u then pcall(function() gid = u:getGroup():getID() end) end
+        if gid then
+            trigger.action.outTextForGroup(gid, hudMsg, 3, true)
+        else
+            trigger.action.outTextForCoalition(blueSide, hudMsg, 3, true)
+        end
         timer.scheduleFunction(combatHudLoop, nil, timer.getTime() + 2.5)
     end
 
@@ -1008,6 +1103,30 @@ local function initReaperGCS()
         )
     end)
 
+
+    -- Weapon releases and kills by the MQ-9 (DCS events), for Frontline.
+    local MQ9_TYPES = { ["MQ-9_Reaper_Flyable"] = true, ["MQ-9_Reaper"] = true, ["MQ-9 Reaper"] = true }
+    local telemetryHandler = {}
+    function telemetryHandler:onEvent(e)
+        if not e or not e.initiator then return end
+        local ok, tn = pcall(function() return e.initiator:getTypeName() end)
+        if not ok or not MQ9_TYPES[tn] then return end
+        if e.id == world.event.S_EVENT_SHOT and e.weapon then
+            local wok, wname = pcall(function() return e.weapon:getTypeName() end)
+            frontline("WEAPON_RELEASE", { weaponName = wok and wname or nil }, e.initiator)
+        elseif e.id == world.event.S_EVENT_KILL and e.target then
+            local info = {}
+            pcall(function()
+                info.targetUnitName = e.target:getName()
+                info.targetTypeName = e.target:getTypeName()
+                info.target = pointOf(e.target:getPoint())
+            end)
+            info.weaponName = e.weapon_name
+            frontline("KILL", info, e.initiator)
+        end
+    end
+    world.addEventHandler(telemetryHandler)
+    env.info("[BNS_MQ9] Frontline telemetry active (type BNS_MQ9)")
 end
 
 -- Execute GCS Menu registration

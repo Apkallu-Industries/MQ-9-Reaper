@@ -40,6 +40,12 @@ There are **two on-disk copies** of the mod — keep both in sync:
 
 Checks on 2026-10-08 (branch `fix/mq9-adap-sync-2026-10-08`): `tools/miz_check.py` MIZ_CHECK_PASS (Combat Patrol + CLAUDE_TEST); dcs-frontline `lint_mission_scripts` 0 errors; `dry_load_mission_scripts` on a scratch copy with the T+1 s menu trigger moved to mission start: `reaper_gcs_menu.lua` loads, 46 F10 entries, telemetry line logged, no errors. The stock dry-load does not run the T+1 s trigger (it is not a mission-start trigger), so it reports 0 scripts on the shipped mission; that is expected.
 
+Run 62 (2026-10-15, branch `fix/mq9-miz-extracted-sync-2026-10-15`):
+- EFM rebuilt against `D:\Eagle Dynamics\DCS World\API` with MSVC (`efm\build.bat`): BUILD_OK; rig `efm\test\rig.bat` SIM_TEST_PASS, 0 failed. `entry.lua` registers `BNS_MQ9_EFM.dll` (binaries + FM[2]) with `BNS_MQ9_USE_EFM = true`.
+- ADAP canonical copy (`G:\Dev\AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper`) brought level with this repo: EFM registration in `entry.lua`, `FM\MQ9_FM.lua`, `bin\BNS_MQ9_EFM.dll` (rig-tested build) and the `BNS MQ-9 Reaper` display name. Originals kept in `AutonomousDronePack\_backups\run62_2026-10-15_mq9`. All three Lua files compile with DCS `luae.exe`.
+- This repo's `miz_extracted/l10n/DEFAULT/reaper_gcs_menu.lua` was the pre-telemetry copy; now identical to the shipped `reaper_gcs_menu.lua` (and to ADAP).
+- Still different between the copies: `fires_pos` (ADAP has the wing-slot fix; this repo gets it with PR #6, waiting on the owner).
+
 ---
 
 ## 🧭 Known context / gotchas
