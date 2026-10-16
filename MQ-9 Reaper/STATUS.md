@@ -46,6 +46,12 @@ Run 62 (2026-10-15, branch `fix/mq9-miz-extracted-sync-2026-10-15`):
 - This repo's `miz_extracted/l10n/DEFAULT/reaper_gcs_menu.lua` was the pre-telemetry copy; now identical to the shipped `reaper_gcs_menu.lua` (and to ADAP).
 - Still different between the copies: `fires_pos` (ADAP has the wing-slot fix; this repo gets it with PR #6, waiting on the owner).
 
+Run 64 (2026-10-16, branch `docs/mq9-run64-notes-2026-10-16`):
+- Start state: no open PRs; #6 (fires_pos) and #8 (run 62) merged, so the fires_pos difference above is closed.
+- EFM on main (129c73f): `efm\build.bat` BUILD_OK (MSVC, `D:\Eagle Dynamics\DCS World\API`); `efm\test\rig.bat` SIM_TEST_PASS, 0 failed. Rebuilt DLL not committed (source unchanged). `entry.lua` registers `BNS_MQ9_EFM.dll` (binaries + FM[2]), `BNS_MQ9_USE_EFM = true`.
+- ADAP copy compared file by file (liveries, EDM and DDS excluded): every Lua and input file is identical apart from line endings; only `STATUS.md` (notes) and `bin\BNS_MQ9_EFM.dll` differ. The DLL is the run 62 build of the same source (MSVC stamps the link time, so builds never match byte for byte). Nothing to sync.
+- Owner item unchanged: `developerName` "Blacknet Systems" (owner rule 2026-10-08) vs the routine brief's "Eagle Dynamics / Yutani Industries".
+
 ---
 
 ## 🧭 Known context / gotchas
