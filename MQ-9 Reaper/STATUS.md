@@ -64,3 +64,4 @@ Run 64 (2026-10-16, branch `docs/mq9-run64-notes-2026-10-16`):
 
 _Update this file as items move from Open → Done._
 - Run 65 (2026-10-16): EFM on main 129c73f: build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (`G:\Dev\AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper`) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ. Nothing to sync.
+- Run 66 (2026-10-16): EFM on main 129c73f: build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: identical apart from line endings, STATUS.md and the DLL.
