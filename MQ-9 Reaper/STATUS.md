@@ -46,6 +46,12 @@ Run 62 (2026-10-15, branch `fix/mq9-miz-extracted-sync-2026-10-15`):
 - This repo's `miz_extracted/l10n/DEFAULT/reaper_gcs_menu.lua` was the pre-telemetry copy; now identical to the shipped `reaper_gcs_menu.lua` (and to ADAP).
 - Still different between the copies: `fires_pos` (ADAP has the wing-slot fix; this repo gets it with PR #6, waiting on the owner).
 
+Run 64 (2026-10-16, branch `docs/mq9-run64-notes-2026-10-16`):
+- Start state: no open PRs; #6 (fires_pos) and #8 (run 62) merged, so the fires_pos difference above is closed.
+- EFM on main (129c73f): `efm\build.bat` BUILD_OK (MSVC, `D:\Eagle Dynamics\DCS World\API`); `efm\test\rig.bat` SIM_TEST_PASS, 0 failed. Rebuilt DLL not committed (source unchanged). `entry.lua` registers `BNS_MQ9_EFM.dll` (binaries + FM[2]), `BNS_MQ9_USE_EFM = true`.
+- ADAP copy compared file by file (liveries, EDM and DDS excluded): every Lua and input file is identical apart from line endings; only `STATUS.md` (notes) and `bin\BNS_MQ9_EFM.dll` differ. The DLL is the run 62 build of the same source (MSVC stamps the link time, so builds never match byte for byte). Nothing to sync.
+- Owner item unchanged: `developerName` "Blacknet Systems" (owner rule 2026-10-08) vs the routine brief's "Eagle Dynamics / Yutani Industries".
+
 ---
 
 ## 🧭 Known context / gotchas
@@ -57,3 +63,14 @@ Run 62 (2026-10-15, branch `fix/mq9-miz-extracted-sync-2026-10-15`):
 ---
 
 _Update this file as items move from Open → Done._
+- Run 65 (2026-10-16): EFM on main 129c73f: build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (`G:\Dev\AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper`) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ. Nothing to sync.
+- Run 66 (2026-10-16): EFM on main 129c73f: build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: identical apart from line endings, STATUS.md and the DLL.
+- Run 67 (2026-10-16): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: every Lua file identical apart from line endings; the DLL differs only as a rebuild.
+- Run 68 (2026-10-16): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
+- Run 69 (2026-10-16): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
+- Run 70 (2026-10-17): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
+- Run 71 (2026-10-17): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
+- Run 72 (2026-10-17): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy unchanged since 2026-10-15 17:38 (run 71 compare, 100 / 100 files, stands). Nothing to sync.
+- Run 73 (2026-10-17): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
+- Run 88 (2026-10-22): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed (run in a fresh worktree `G:\Dev\MQ-9-wt-run88` on origin/main); rebuilt DLL not committed. ADAP copy re-compared: every file identical apart from line endings except STATUS.md; nothing to sync. The main checkout `G:\Dev\MQ-9-Reaper` is on `bns/stencil-mark-2026-10-17` (pushed, no PR) with 4 untracked files (AGENTS.md, docs/BNS_STENCIL.md, tools/bns_stencil_mark.json / .py); left untouched for the owner. `G:\_BNS-Archive` (old run62 / run69 worktrees) no longer exists.
+- Run 89 (2026-10-22, later): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed (worktree `G:\Dev\MQ-9-wt-run88` on origin/main); rebuilt DLL reverted. ADAP copy re-compared: 100 / 100 files; with line endings ignored only STATUS.md and the DLL differ. Nothing to sync. developerName "Blacknet Systems" kept (owner rule 2026-10-08).
