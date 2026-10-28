@@ -208,3 +208,8 @@ Developed for the DCS World flight simulation community by **Apkallu Industries*
 
 ## Mod display name (owner rule 2026-10-09)
 - Display names: every BNS mod's DCS `displayName` / `DisplayName` starts with `BNS ` (e.g. "BNS A6M2 Zero Model 21", "BNS B-17G-80-BO Flying Fortress", "BNS MQ-9 Reaper") so all Blacknet mods list together under B in the DCS menus. Only the menu label changes: type names, folders, liveries and missions stay as they are. Set 2026-10-09 (A6M2, B-17G, MQ-9 renamed; B3-A and the ships already complied; the B-2 is retired). `scaffold_aircraft_mod` / `scaffold_vehicle_mod` add the prefix automatically.
+
+## Install (2026-10-28, head engineer)
+Install only with the library `Tools/install_drift.py --install "MQ-9 Reaper Flyable" <staged>` (law 5a: never edit
+the installed copy). 2026-10-28: checkout moved to main; main's 'MQ-9 Reaper' folder (minus miz_extracted/) installed,
+0 drift. Open: the mod ships Cockpit_Su-25T.EDM and the SU-25T cockpit textures (ED content; clean-room rule).
