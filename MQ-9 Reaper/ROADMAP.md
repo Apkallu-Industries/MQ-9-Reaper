@@ -86,7 +86,7 @@ gantt
 
 ### Phase 1: Heavy Armed ISR Overwatch (MQ-9 Reaper) — *Current Benchmark*
 - [x] Autonomous tangent-circle orbit stabilization (hands-off loiter).
-- [x] Su-25T CWS avionics & AGM-114K Hellfire weapon integration.
+- [x] CWS avionics & AGM-114K Hellfire weapon integration (BNS sensor-view cockpit shape since 2026-10-29).
 - [x] Decoupled Pilot and Sensor Operator camera viewpoints.
 - [x] Multi-monitor and ultrawide PiP / CPG viewport presets.
 - [x] F10 GCS tactical radio menu with laser coding and datalink controls.

@@ -25,7 +25,7 @@
 
 ### 2.1. Dedicated 3D Ground Control Station (GCS) Container Cockpit
 * **Problem Statement**:
-  The mod currently uses the Su-25T 3D cockpit model hidden behind the nose sensor camera. While functional, it does not provide the authentic experience of sitting inside an unmanned operations center.
+  Since 2026-10-29 the mod's cockpit shape is the BNS sensor-view shape BNS-AV-GCS-0001 (no geometry: the view is the nose sensor camera plus the screen-space GCS HUD). It does not yet provide the experience of sitting inside an unmanned operations center.
 * **Proposed Solution**:
   * Create a custom 3D interior model (`Cockpit_Reaper_GCS.EDM`) depicting an authentic **USAF MQ-9 GCS shipping container console**:
     * Dual operator workstations: Pilot station (Left) and Sensor Operator station (Right).

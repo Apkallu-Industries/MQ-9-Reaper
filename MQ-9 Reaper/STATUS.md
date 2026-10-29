@@ -58,7 +58,7 @@ Run 64 (2026-10-16, branch `docs/mq9-run64-notes-2026-10-16`):
 - **Two copies + one GitHub remote** = clobber risk. Fix a bug in **both** until the pipeline is consolidated.
 - **Registration order rule** (all homebrew flyables): `make_flyable` must run **before** `make_view_settings`, or the plugin aborts before `plugin_done()` and the aircraft is installed-but-missing-from-ME.
 - **mapclasskey** is a shared MIL-STD-2525 symbol class — duplicates are **fine**, not a conflict.
-- **F10 GCS menu is cosmetic** (info overlay only): real weapon employment + laser is the Su-25T cockpit chain.
+- **F10 GCS menu is cosmetic** (info overlay only): real weapon employment + laser is the CWS avionics chain.
 
 ---
 
@@ -74,3 +74,12 @@ _Update this file as items move from Open → Done._
 - Run 73 (2026-10-17): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed; rebuilt DLL not committed. ADAP copy (AutonomousDronePack\MQ-9 Reaper\MQ-9 Reaper) re-compared: 100 / 100 files, only STATUS.md and the DLL build differ (line endings ignored). Nothing to sync.
 - Run 88 (2026-10-22): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed (run in a fresh worktree `G:\Dev\MQ-9-wt-run88` on origin/main); rebuilt DLL not committed. ADAP copy re-compared: every file identical apart from line endings except STATUS.md; nothing to sync. The main checkout `G:\Dev\MQ-9-Reaper` is on `bns/stencil-mark-2026-10-17` (pushed, no PR) with 4 untracked files (AGENTS.md, docs/BNS_STENCIL.md, tools/bns_stencil_mark.json / .py); left untouched for the owner. `G:\_BNS-Archive` (old run62 / run69 worktrees) no longer exists.
 - Run 89 (2026-10-22, later): EFM on main 129c73f (unchanged): build.bat BUILD_OK, rig.bat SIM_TEST_PASS 0 failed (worktree `G:\Dev\MQ-9-wt-run88` on origin/main); rebuilt DLL reverted. ADAP copy re-compared: 100 / 100 files; with line endings ignored only STATUS.md and the DLL differ. Nothing to sync. developerName "Blacknet Systems" kept (owner rule 2026-10-08).
+- Run 90 (2026-10-29, mq9-head, main): **clean-room cockpit.** The mod shipped ED content: a borrowed ED cockpit shell
+  (cockpit EDM, ILV, texture archive, a hand-edited copy and a .bak, in Cockpit/Shape and Shapes) and ED's Options
+  page. All removed. The real MQ-9A has no cockpit (GCS-flown); the player view stays the sensor camera (Views.lua) and
+  the screen-space GCS_HUD, so the cockpit shape is now the BNS library part BNS-AV-GCS-0001 (BN31-GCS0001-01, no
+  geometry: root node + PNT_SENSOR_EYE connector), declared by Cockpit/Scripts/mainpanel_init.lua and `MainPanel` in
+  device_init.lua. CWS avionics (`support_for_cws`) are unchanged. The exterior EDMs and mq-9_reaper_textures.zip were
+  byte-identical copies of ED's MQ-9 (Bazar/World): no longer shipped, the shape name resolves from the DCS install.
+  Dev docs moved out of the shipped folder to the repo's Documents/. Details, sources and open items:
+  repo docs/HANDOFF.md. NOT YET PROVEN IN DCS: owner to check the sensor feed (mfd0) and weapon lock in flight.

@@ -1,5 +1,5 @@
 -- MQ-9 Reaper Aircraft Descriptor for Flyable Mod
--- Converted for Pilot/Operator Control with Su-25T CWS HUD and Optical Avionics
+-- Flown from the GCS sensor view: CWS avionics, BNS EFM, BNS screen-space GCS_HUD (no cockpit geometry)
 
 Reaper =  {
         

@@ -23,10 +23,10 @@ ViewSettings = {
 
 local function head_pos_default(tab)
     if not tab then tab = {} end
-    tab.viewAngle = tab.viewAngle or 42.0 -- Clean FOV: focused strictly on forward flight view & HUD
+    tab.viewAngle = tab.viewAngle or 42.0 -- Clean FOV: forward flight view & GCS HUD
     tab.hAngle    = tab.hAngle    or 0.0
-    tab.vAngle    = tab.vAngle    or 0.0  -- Level with horizon: completely clears instrument panel below
-    tab.x_trans   = tab.x_trans   or 0.54 -- Forward past IT-23M TV screen: completely removes 2nd sensor window
+    tab.vAngle    = tab.vAngle    or 0.0  -- Level with the horizon
+    tab.x_trans   = tab.x_trans   or 0.54 -- 0.54 m ahead of the turret point (kept from the tuned sensor view)
     tab.y_trans   = tab.y_trans   or 0.02
     tab.z_trans   = tab.z_trans   or 0.0
     tab.rollAngle = tab.rollAngle or 0.0
